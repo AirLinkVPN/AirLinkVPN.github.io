@@ -1,0 +1,61 @@
+name: Auto Update Subscription Link
+
+on:
+  push:
+    paths:
+      - 'VpnList.txt'
+  schedule:
+    - cron: '*/30 * * * *'  # Каждые 30 минут
+
+jobs:
+  update-link:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Generate auto-updating link
+        run: |
+          # Создаем папку subscribe если её нет
+          mkdir -p subscribe
+          
+          # Генерируем ссылку с текущей датой
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          AUTO_LINK="https://raw.githubusercontent.com/AirLinkVPN/AirLinkVPN/main/VpnList.txt?v=$TIMESTAMP"
+          
+          # Сохраняем ссылку в файл
+          echo "$AUTO_LINK" > subscribe/latest.txt
+          
+          # Создаем HTML страницу
+          cat > subscribe/index.html << EOF
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta http-equiv="refresh" content="0; url=$AUTO_LINK" />
+          </head>
+          <body>
+              <p>Auto-redirecting to latest subscription...</p>
+              <script>
+                  window.location.href = "$AUTO_LINK";
+              </script>
+          </body>
+          </html>
+          EOF
+          
+          # Создаем простой .conf файл для некоторых клиентов
+          echo "# AirLinkVPN Auto Subscription" > subscribe/airlink.conf
+          echo "# Updated: $(date)" >> subscribe/airlink.conf
+          echo "" >> subscribe/airlink.conf
+          echo "$AUTO_LINK" >> subscribe/airlink.conf
+          
+          # Создаем файл с Base64 версией (если нужно)
+          base64 VpnList.txt > subscribe/VpnList_base64.txt
+      
+      - name: Commit and push auto-link
+        run: |
+          git config user.name "Auto Link Updater"
+          git config user.email "auto@airlinkvpn.com"
+          git add subscribe/
+          git commit -m "Auto-update subscription link: $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes"
+          git push
