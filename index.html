@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirLink VPN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: #f0f0f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(120, 119, 198, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .particle:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 5%; animation-delay: 0s; animation-duration: 20s; }
+        .particle:nth-child(2) { width: 150px; height: 150px; top: 70%; left: 80%; animation-delay: -5s; animation-duration: 25s; }
+        .particle:nth-child(3) { width: 50px; height: 50px; top: 40%; left: 90%; animation-delay: -10s; animation-duration: 15s; background: rgba(86, 98, 246, 0.4); }
+        .particle:nth-child(4) { width: 100px; height: 100px; top: 80%; left: 10%; animation-delay: -7s; animation-duration: 30s; }
+        .particle:nth-child(5) { width: 120px; height: 120px; top: 15%; left: 70%; animation-delay: -12s; animation-duration: 22s; background: rgba(156, 39, 176, 0.4); }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+            25% { transform: translateY(-40px) translateX(40px) rotate(90deg); }
+            50% { transform: translateY(20px) translateX(-30px) rotate(180deg); }
+            75% { transform: translateY(30px) translateX(20px) rotate(270deg); }
+        }
+
+        .tech-icon {
+            position: absolute;
+            color: rgba(124, 77, 255, 0.15);
+            font-size: 1.5rem;
+            z-index: -1;
+            animation: tech-float 25s infinite linear;
+            filter: blur(0.5px);
+        }
+
+        .tech-icon.small { font-size: 1rem; opacity: 0.2; }
+        .tech-icon.medium { font-size: 1.8rem; opacity: 0.25; }
+        .tech-icon.large { font-size: 2.5rem; opacity: 0.3; }
+
+        .tech-icon.color1 { color: rgba(124, 77, 255, 0.15); }
+        .tech-icon.color2 { color: rgba(86, 98, 246, 0.15); }
+        .tech-icon.color3 { color: rgba(156, 39, 176, 0.15); }
+        .tech-icon.color4 { color: rgba(58, 143, 254, 0.15); }
+        .tech-icon.color5 { color: rgba(0, 136, 204, 0.15); }
+
+        @keyframes tech-float {
+            0% {
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+                opacity: 0.2;
+            }
+            25% {
+                transform: translateY(-30px) translateX(50px) rotate(90deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(20px) translateX(-40px) rotate(180deg);
+                opacity: 0.25;
+            }
+            75% {
+                transform: translateY(40px) translateX(30px) rotate(270deg);
+                opacity: 0.35;
+            }
+            100% {
+                transform: translateY(0px) translateX(0px) rotate(360deg);
+                opacity: 0.2;
+            }
+        }
+
+        @keyframes tech-pulse {
+            0%, 100% {
+                opacity: 0.15;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.3;
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes tech-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes tech-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .tech-icon.pulse { animation: tech-pulse 4s infinite ease-in-out; }
+        .tech-icon.rotate { animation: tech-rotate 20s infinite linear; }
+        .tech-icon.bounce { animation: tech-bounce 3s infinite ease-in-out; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem 1rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #7c4dff;
+            text-shadow: 0 0 15px rgba(124, 77, 255, 0.7);
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { text-shadow: 0 0 15px rgba(124, 77, 255, 0.7); }
+            to { text-shadow: 0 0 25px rgba(124, 77, 255, 0.9), 0 0 35px rgba(124, 77, 255, 0.5); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(90deg, #7c4dff, #3a8ffe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #b0b0ff;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+            padding: 0 0.5rem;
+        }
+
+        /* Стили для кнопки "Подключить подписку" */
+        .connect-button {
+            text-align: center;
+            margin: 2rem 0 3rem;
+        }
+
+        .connect-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(90deg, #7c4dff, #3a8ffe);
+            color: white;
+            text-decoration: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(124, 77, 255, 0.5);
+            transition: all 0.3s ease;
+            animation: connect-glow 2s infinite alternate;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .connect-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .connect-btn:hover::before {
+            left: 100%;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(124, 77, 255, 0.7);
+        }
+
+        .connect-btn:active {
+            transform: translateY(-1px);
+        }
+
+        @keyframes connect-glow {
+            0% {
+                box-shadow: 0 8px 25px rgba(124, 77, 255, 0.5);
+            }
+            100% {
+                box-shadow: 0 8px 35px rgba(124, 77, 255, 0.8), 0 0 20px rgba(124, 77, 255, 0.4);
+            }
+        }
+
+        .connect-btn i {
+            font-size: 1.5rem;
+        }
+
+        .features-desktop {
+            display: none;
+        }
+
+        .features-mobile {
+            position: relative;
+            min-height: 500px;
+            overflow: hidden;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .feature-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(100%);
+        }
+
+        .feature-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .feature-slide.prev {
+            transform: translateX(-100%);
+        }
+
+        .feature-slide.next {
+            transform: translateX(100%);
+        }
+
+        .card {
+            background: rgba(30, 27, 75, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(124, 77, 255, 0.25);
+            margin: 0 auto;
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            color: #7c4dff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 i {
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            line-height: 1.6;
+            color: #d0d0ff;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #7c4dff;
+            font-weight: bold;
+        }
+
+        .operator-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .operator-tag {
+            background: rgba(124, 77, 255, 0.15);
+            padding: 0.5rem 0.9rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(124, 77, 255, 0.3);
+            white-space: nowrap;
+        }
+
+        .info-box {
+            background: rgba(30, 27, 75, 0.7);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+            border: 1px solid rgba(124, 77, 255, 0.2);
+        }
+
+        .info-box p {
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .telegram-section {
+            text-align: center;
+            margin: 3rem 0 2rem;
+            padding: 2rem 1.5rem;
+            background: rgba(30, 27, 75, 0.6);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 136, 204, 0.3);
+        }
+
+        .telegram-icon {
+            font-size: 4rem;
+            color: #0088cc;
+            margin-bottom: 1.2rem;
+            filter: drop-shadow(0 0 10px rgba(0, 136, 204, 0.5));
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .telegram-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #0088cc;
+        }
+
+        .telegram-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .telegram-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(90deg, #0088cc, #00a2e8);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.4);
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+        }
+
+        .telegram-link.channel {
+            background: linear-gradient(90deg, #2AABEE, #229ED9);
+        }
+
+        .telegram-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 136, 204, 0.6);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: #a0a0d0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .opensource-note {
+            background: rgba(124, 77, 255, 0.1);
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .telegram-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .telegram-link {
+                width: auto;
+            }
+            
+            .tech-icon {
+                font-size: 2rem;
+            }
+            
+            .tech-icon.small { font-size: 1.2rem; }
+            .tech-icon.medium { font-size: 2.2rem; }
+            .tech-icon.large { font-size: 3rem; }
+
+            .connect-btn {
+                font-size: 1.5rem;
+                padding: 1.4rem 3rem;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .features-mobile {
+                display: none;
+            }
+            
+            .features-desktop {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+                margin: 3rem 0;
+            }
+            
+            .features-desktop .card {
+                height: auto;
+                opacity: 1;
+                position: static;
+                width: 100%;
+                max-width: none;
+            }
+            
+            .container {
+                padding: 2rem;
+            }
+            
+            header {
+                padding: 3rem 1rem;
+            }
+            
+            .logo {
+                font-size: 4.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 3.2rem;
+            }
+            
+            .tagline {
+                font-size: 1.3rem;
+                margin-bottom: 3rem;
+            }
+
+            .connect-button {
+                margin: 3rem 0 4rem;
+            }
+
+            .connect-btn {
+                padding: 1.5rem 3.5rem;
+                font-size: 1.6rem;
+            }
+            
+            .telegram-section {
+                padding: 3rem;
+                margin: 4rem 0 3rem;
+            }
+            
+            .telegram-icon {
+                font-size: 5rem;
+            }
+            
+            .telegram-section h2 {
+                font-size: 2.2rem;
+            }
+            
+            .telegram-link {
+                padding: 1.2rem 2.5rem;
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h1>AirLink VPN</h1>
+            <p class="tagline">
+                Обход блокировок по белым спискам на всех операторах связи России
+            </p>
+        </header>
+
+        <!-- Кнопка "Подключить подписку" -->
+        <div class="connect-button">
+            <a href="https://t.me/AirLinkVPNBot" target="_blank" class="connect-btn">
+                <i class="fas fa-rocket"></i>
+                Подключить подписку
+            </a>
+        </div>
+
+        <div class="features-desktop">
+            <div class="card">
+                <h2><i class="fas fa-unlock-alt"></i> Полный обход блокировок</h2>
+                <p>Сервис эффективно работает на всех крупнейших операторах сотовой связи в России.</p>
+                <div class="operator-list">
+                    <div class="operator-tag">МТС</div>
+                    <div class="operator-tag">МегаФон</div>
+                    <div class="operator-tag">Билайн</div>
+                    <div class="operator-tag">Tele2</div>
+                    <div class="operator-tag">Yota</div>
+                    <div class="operator-tag">СберМобайл</div>
+                    <div class="operator-tag">Ростелеком</div>
+                </div>
+                <p style="margin-top: 1.2rem;">Также работает на фиксированном интернете (Дом.ру, ТТК и другие провайдеры).</p>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-sync-alt"></i> Автообновление подписок</h2>
+                <p>Списки серверов обновляются автоматически каждый час.</p>
+                <p>Если в приложении (Happ VPN, v2rayTun и др.) подписка не обновилась самостоятельно, нажмите кнопку <span class="highlight">🔄 Обновить</span> вручную.</p>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-heart"></i> Бесплатный и открытый</h2>
+                <p>В сервисе <span class="highlight">отсутствуют платные услуги</span>. Весь функционал доступен бесплатно.</p>
+                <p>Проект полностью бесплатен. Вы можете поддержать его, отправив звёзды в Telegram-боте (это валюта Telegram) либо воспользоваться платным обходом в боте.</p>
+            </div>
+        </div>
+
+        <div class="features-mobile">
+            <div class="feature-slide active" data-index="0">
+                <div class="card">
+                    <h2><i class="fas fa-unlock-alt"></i> Полный обход блокировок</h2>
+                    <p>Сервис эффективно работает на всех крупнейших операторах сотовой связи в России.</p>
+                    <div class="operator-list">
+                        <div class="operator-tag">МТС</div>
+                        <div class="operator-tag">МегаФон</div>
+                        <div class="operator-tag">Билайн</div>
+                    </div>
+                    <div class="operator-list">
+                        <div class="operator-tag">Tele2</div>
+                        <div class="operator-tag">Yota</div>
+                        <div class="operator-tag">СберМобайл</div>
+                        <div class="operator-tag">Ростелеком</div>
+                    </div>
+                    <p style="margin-top: 1.2rem;">Также работает на фиксированном интернете (Дом.ру, ТТК и другие провайдеры).</p>
+                </div>
+            </div>
+            
+            <div class="feature-slide" data-index="1">
+                <div class="card">
+                    <h2><i class="fas fa-sync-alt"></i> Автообновление подписок</h2>
+                    <p>Списки серверов обновляются автоматически каждый час.</p>
+                    <p>Если в приложении (Happ VPN, v2rayTun и др.) подписка не обновилась самостоятельно, нажмите кнопку <span class="highlight">🔄 Обновить</span> вручную.</p>
+                </div>
+            </div>
+            
+            <div class="feature-slide" data-index="2">
+                <div class="card">
+                    <h2><i class="fas fa-heart"></i> Бесплатный и открытый</h2>
+                    <p>В сервисе <span class="highlight">отсутствуют платные услуги</span>. Весь функционал доступен бесплатно.</p>
+                    <p>Проект полностью бесплатен. Вы можете поддержать его, отправив звёзды в Telegram-боте (это валюта Telegram) либо воспользоваться платным обходом в боте.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <p><strong>Как использовать:</strong> перейти в telegram бота по кнопке ниже, нажать кнопку "Активная подписка" и скопировать ссылку. После чего вставить в приложение Happ VPN, v2rayTun и т.д.</p>
+        </div>
+
+        <section class="telegram-section">
+            <div class="telegram-icon">
+                <i class="fab fa-telegram"></i>
+            </div>
+            <h2>Telegram для управления и обновлений</h2>
+            <p>Получайте актуальные конфигурации, инструкции и помощь через наших бота и канал.</p>
+            <div class="telegram-buttons">
+                <a href="https://t.me/AirLinkVPNBot" target="_blank" class="telegram-link">
+                    <i class="fab fa-telegram"></i> @AirLinkVPNBot
+                </a>
+                <a href="https://t.me/AirLinkVPN" target="_blank" class="telegram-link channel">
+                    <i class="fab fa-telegram"></i> Наш канал
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="opensource-note">
+            <p><strong>AirLink VPN</strong> — проект с открытым исходным кодом, созданный для свободного доступа к информации.</p>
+            <p>Техническая поддержка и обновления: @AirLinkVPNBot</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.feature-slide');
+            
+            let currentSlide = 0;
+            const slideInterval = 3000;
+            let slideTimer = null;
+            let isAnimating = false;
+            let startX = 0;
+            let endX = 0;
+            
+            function clearAutoSlide() {
+                if (slideTimer) {
+                    clearInterval(slideTimer);
+                    slideTimer = null;
+                }
+            }
+            
+            function showSlide(index, direction = 'next') {
+                if (isAnimating) return;
+                
+                isAnimating = true;
+                
+                slides.forEach(slide => {
+                    slide.classList.remove('active', 'prev', 'next');
+                });
+                
+                if (slides[index]) {
+                    slides[index].classList.add('active');
+                }
+                
+                currentSlide = index;
+                
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 800);
+            }
+            
+            function nextSlide() {
+                if (isAnimating) return;
+                
+                let nextIndex = currentSlide + 1;
+                if (nextIndex >= slides.length) {
+                    nextIndex = 0;
+                }
+                showSlide(nextIndex, 'next');
+            }
+            
+            function prevSlide() {
+                if (isAnimating) return;
+                
+                let prevIndex = currentSlide - 1;
+                if (prevIndex < 0) {
+                    prevIndex = slides.length - 1;
+                }
+                showSlide(prevIndex, 'prev');
+            }
+            
+            function startAutoSlide() {
+                clearAutoSlide();
+                slideTimer = setInterval(() => {
+                    if (!isAnimating) {
+                        nextSlide();
+                    }
+                }, slideInterval);
+            }
+            
+            function stopAutoSlide() {
+                clearAutoSlide();
+            }
+            
+            const featuresMobile = document.querySelector('.features-mobile');
+            if (featuresMobile) {
+                featuresMobile.addEventListener('touchstart', function(e) {
+                    startX = e.touches[0].clientX;
+                    stopAutoSlide();
+                });
+                
+                featuresMobile.addEventListener('touchmove', function(e) {
+                    endX = e.touches[0].clientX;
+                });
+                
+                featuresMobile.addEventListener('touchend', function() {
+                    const diffX = startX - endX;
+                    const minSwipe = 50;
+                    
+                    if (Math.abs(diffX) > minSwipe && !isAnimating) {
+                        if (diffX > 0) {
+                            nextSlide();
+                        } else {
+                            prevSlide();
+                        }
+                    }
+                    
+                    setTimeout(() => {
+                        startAutoSlide();
+                    }, 5000);
+                });
+            }
+            
+            showSlide(0);
+            startAutoSlide();
+            
+            const particlesContainer = document.querySelector('.particles');
+            const techIcons = [
+                'fa-server', 'fa-wifi', 'fa-shield-alt', 'fa-globe', 'fa-cloud',
+                'fa-satellite', 'fa-satellite-dish', 'fa-router', 'fa-network-wired',
+                'fa-broadcast-tower', 'fa-signal', 'fa-ethernet', 'fa-hdd',
+                'fa-microchip', 'fa-memory', 'fa-database', 'fa-hashtag',
+                'fa-link', 'fa-unlock', 'fa-key', 'fa-lock', 'fa-user-secret',
+                'fa-code-branch', 'fa-sitemap', 'fa-project-diagram',
+                'fa-bolt', 'fa-battery-full', 'fa-plug', 'fa-desktop'
+            ];
+            
+            const sizes = ['small', 'medium', 'large'];
+            const colors = ['color1', 'color2', 'color3', 'color4', 'color5'];
+            const animations = ['tech-float', 'pulse', 'rotate', 'bounce'];
+            
+            const iconCount = 30;
+            
+            for (let i = 0; i < iconCount; i++) {
+                const icon = document.createElement('div');
+                icon.classList.add('tech-icon');
+                
+                const randomIcon = techIcons[Math.floor(Math.random() * techIcons.length)];
+                icon.innerHTML = `<i class="fas ${randomIcon}"></i>`;
+                
+                const randomSize = sizes[Math.floor(Math.random() * sizes.length)];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+                
+                icon.classList.add(randomSize, randomColor);
+                if (randomAnimation !== 'tech-float') {
+                    icon.classList.add(randomAnimation);
+                }
+                
+                const top = Math.random() * 100;
+                const left = Math.random() * 100;
+                icon.style.top = `${top}%`;
+                icon.style.left = `${left}%`;
+                
+                const delay = -(Math.random() * 30);
+                const duration = 20 + Math.random() * 25;
+                
+                if (randomAnimation === 'tech-float') {
+                    icon.style.animation = `tech-float ${duration}s infinite linear ${delay}s`;
+                }
+                
+                const rotation = Math.random() * 360;
+                icon.style.transform = `rotate(${rotation}deg)`;
+                
+                particlesContainer.appendChild(icon);
+            }
+        });
+    </script>
+</body>
+</html>
