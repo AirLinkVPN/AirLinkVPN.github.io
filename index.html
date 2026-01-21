@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirLink VPN | Свобода интернета</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --accent: #7c4dff;
+            --accent-glow: rgba(124, 77, 255, 0.6);
+            --bg: #000000;
+            --card-bg: rgba(15, 15, 20, 0.85);
+            --text: #ffffff;
+            --text-dim: #b0b0ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .loader-main-text {
+            font-family: 'Syncopate', sans-serif;
+            color: var(--text);
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            animation: blink 2s infinite;
+        }
+
+        .loader-logo {
+            width: 100px;
+            margin-bottom: 30px;
+            animation: pulse-logo 2s infinite ease-in-out;
+            border-radius: 15px;
+        }
+
+        .scene {
+            position: relative;
+            width: 300px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .node {
+            font-size: 2.5rem;
+            color: var(--text);
+            z-index: 2;
+        }
+
+        .connection-line {
+            position: absolute;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: #222;
+            overflow: hidden;
+            border-radius: 3px;
+        }
+
+        .line-progress {
+            width: 0%;
+            height: 100%;
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+            transition: width 0.5s linear;
+        }
+
+        .break-flash {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff3d00;
+            font-size: 3rem;
+            opacity: 0;
+            text-shadow: 0 0 20px #ff3d00;
+        }
+
+        .bypass-path {
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            height: 140px;
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            filter: drop-shadow(0 0 10px var(--accent));
+        }
+
+        #statusText {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: #777;
+            height: 30px;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .tech-icon {
+            position: absolute;
+            color: rgba(124, 77, 255, 0.25);
+            font-size: 1.2rem;
+            animation: float-bg 25s infinite linear;
+        }
+
+        @keyframes float-bg {
+            from { transform: translateY(110vh) rotate(0deg) scale(0.8); opacity: 0; }
+            20% { opacity: 0.4; }
+            80% { opacity: 0.4; }
+            to { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        .main-content {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .main-logo {
+            width: 160px;
+            border-radius: 25px;
+            margin-bottom: 40px;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 60px var(--accent-glow);
+            animation: pulse-logo 3s infinite ease-in-out;
+        }
+
+        h1 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        .tagline {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            max-width: 700px;
+            margin: 0 auto 50px;
+            font-weight: 400;
+            background: linear-gradient(90deg, #ffffff, #b0b0ff, #7c4dff, #b0b0ff, #ffffff);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px 50px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 4px;
+            box-shadow: 0 10px 30px -10px var(--accent-glow);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%; width: 150%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .btn:hover::after { left: 100%; }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px -10px var(--accent-glow);
+            background: #8a61ff;
+        }
+
+        .btn:active { transform: translateY(-2px); }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent);
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background: rgba(124, 77, 255, 0.1);
+            box-shadow: 0 10px 30px -10px var(--accent-glow);
+        }
+
+        section { padding: 100px 0; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 40px;
+            border: 1px solid rgba(124, 77, 255, 0.1);
+            border-bottom: 4px solid var(--accent);
+            backdrop-filter: blur(20px);
+            transition: 0.4s ease;
+            border-radius: 12px;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px -20px var(--accent-glow);
+        }
+
+        .card i.main-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        .card h2 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .mirror-note {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(124, 77, 255, 0.3);
+            font-size: 0.95rem;
+            color: #fff;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .mirror-note i {
+            color: #ffcc00;
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+
+        .operator-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .tag {
+            padding: 8px 15px;
+            background: rgba(124, 77, 255, 0.05);
+            border: 1px solid var(--accent);
+            font-size: 0.85rem;
+            color: var(--text);
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 4px;
+        }
+
+        .how-to-container {
+            background: linear-gradient(145deg, rgba(20,20,25,0.9), rgba(10,10,15,0.9));
+            padding: 80px 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(124, 77, 255, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .how-to-container::before {
+             content: '';
+             position: absolute;
+             top: -50%; left: -50%; width: 200%; height: 200%;
+             background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+             opacity: 0.1;
+             pointer-events: none;
+        }
+
+        .how-to-container h3 { 
+            font-family: 'Syncopate', sans-serif; 
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .step-text {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 800px;
+            margin: 0 auto 50px;
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        footer {
+            padding: 60px 20px;
+            text-align: center;
+            background: #050505;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-family: 'Syncopate', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .btn { width: 100%; padding: 18px; }
+            header { padding: 100px 20px 50px; min-height: auto; }
+            .scene { width: 240px; }
+            .loader-main-text { font-size: 1rem; }
+            h1 { line-height: 1.2; }
+        }
+
+        @keyframes pulse-logo {
+            0%, 100% { transform: scale(1);box-shadow: 0 0 60px var(--accent-glow); }
+            50% { transform: scale(1.03); box-shadow: 0 0 80px var(--accent-glow), 0 0 30px var(--accent); }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="loader-main-text">ИДЕТ ЗАГРУЗКА САЙТА...</div>
+        
+        <img src="image_b7725c.png" class="loader-logo" alt="Logo">
+        
+        <div class="scene">
+            <i class="fas fa-server node"></i>
+            <div class="connection-line">
+                <div class="line-progress" id="progress"></div>
+            </div>
+            <i class="fas fa-user node"></i>
+            <i class="fas fa-triangle-exclamation break-flash" id="breakIcon"></i>
+            
+            <svg class="bypass-path" viewBox="0 0 300 140">
+                <path d="M 50 70 Q 150 -30 250 70" id="bypassLine" />
+            </svg>
+        </div>
+        <p id="statusText">УСТАНОВКА СОЕДИНЕНИЯ...</p>
+    </div>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="main-content" id="content">
+        <header>
+            <img src="image_b7725c.png" class="main-logo" alt="AirLink Logo">
+            <h1>AIRLINK VPN</h1>
+            <p class="tagline">Получи доступ к обычному интернету, без белых списков, с нормальным доступом к YouTube и другим сервисам уже сейчас!</p>
+            <div class="btn-container">
+                <a href="https://t.me/AirLinkVPNBot" target="_blank" class="btn">
+                    <i class="fas fa-rocket"></i> Подключить
+                </a>
+                <a href="#features" class="btn btn-outline">
+                    <i class="fas fa-info"></i> Узнать больше
+                </a>
+            </div>
+        </header>
+
+        <section id="features">
+            <div class="grid">
+                <div class="card reveal">
+                    <i class="fas fa-shield-halved main-icon"></i>
+                    <h2>ПОЛНЫЙ ОБХОД БЛОКИРОВОК</h2>
+                    <p>Эффективно работает на мобильных операторах и фиксированном интернете. Использует современные протоколы для маскировки трафика.</p>
+                    <div class="operator-tags">
+                        <span class="tag">МТС</span><span class="tag">МегаФон</span><span class="tag">Билайн</span><span class="tag">Tele2</span><span class="tag">Yota</span><span class="tag">Ростелеком</span>
+                    </div>
+                </div>
+
+                <div class="card reveal">
+                    <i class="fas fa-sync-alt main-icon"></i>
+                    <h2>АВТООБНОВЛЕНИЕ И ЗЕРКАЛА</h2>
+                    <p>Списки серверов обновляются автоматически каждый час. В приложении (Happ VPN, v2rayTun) достаточно нажать кнопку обновления.</p>
+                    
+                    <div class="mirror-note">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <div>
+                            <strong>Важно:</strong> Если в вашем регионе будет ограничен доступ к основному ресурсу с подпиской, мы оперативно создадим зеркало. Следите за новостями в <strong>боте и нашем канале</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card reveal">
+                    <i class="fas fa-code-branch main-icon"></i>
+                    <h2>БЕСПЛАТНЫЙ И ОТКРЫТЫЙ</h2>
+                    <p>Проект с открытым исходным кодом. Полностью бесплатен. Нет никаких скрытых платных услуг или ограничений скорости.</p>
+                    <p style="margin-top: 20px;">Поддержите проект, отправив "звёзды" в нашем Telegram-боте.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="how-to-container">
+                <i class="fab fa-telegram" style="font-size: 4rem; color: #0088cc; margin-bottom: 30px;"></i>
+                <h3>УПРАВЛЕНИЕ ЧЕРЕЗ TELEGRAM</h3>
+                <p class="step-text">
+                    Все просто: перейдите в бота, нажмите кнопку <span class="highlight">"Активная подписка"</span>, скопируйте полученную ссылку и вставьте её в ваше приложение (Happ VPN, v2rayTun и др.).
+                </p>
+                <div class="btn-container">
+                    <a href="https://t.me/AirLinkVPNBot" target="_blank" class="btn" style="background: #0088cc;">
+                        <i class="fab fa-telegram"></i> Открыть Бота
+                    </a>
+                    <a href="https://t.me/AirLinkVPN" target="_blank" class="btn btn-outline" style="border-color: #0088cc; color: #ffffff; background: rgba(0, 136, 204, 0.15);">
+                        <i class="fab fa-telegram"></i> Наш Канал
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>AIRLINK VPN &copy; 2026 | СВОБОДНЫЙ ДОСТУП К ИНФОРМАЦИИ</p>
+        </footer>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const progress = document.getElementById('progress');
+            const breakIcon = document.getElementById('breakIcon');
+            const bypassLine = document.getElementById('bypassLine');
+            const statusText = document.getElementById('statusText');
+            const loader = document.getElementById('loader');
+            const content = document.getElementById('content');
+            
+            setTimeout(() => {
+                progress.style.width = '60%';
+            }, 500);
+
+            setTimeout(() => {
+                progress.style.transition = 'width 0.2s ease-out, background 0.2s';
+                progress.style.width = '50%';
+                progress.style.background = '#ff3d00';
+                progress.style.boxShadow = '0 0 20px #ff3d00';
+                breakIcon.style.opacity = '1';
+                breakIcon.style.animation = 'pulse-logo 1s infinite';
+                statusText.innerText = 'ОБНАРУЖЕНА БЛОКИРОВКА...';
+                statusText.style.color = '#ff3d00';
+            }, 2000);
+
+            setTimeout(() => {
+                bypassLine.style.transition = 'stroke-dashoffset 2s ease-in-out';
+                bypassLine.style.strokeDashoffset = '0';
+                statusText.innerText = 'ЗАПУСК ПРОТОКОЛА ОБХОДА...';
+                statusText.style.color = 'var(--accent)';
+            }, 3500);
+
+            setTimeout(() => {
+                 statusText.innerText = 'СОЕДИНЕНИЕ УСТАНОВЛЕНО!';
+                 statusText.style.color = '#00ff00';
+                 breakIcon.style.opacity = '0';
+                 progress.style.transition = 'width 0.8s ease-in-out, background 0.8s';
+                 progress.style.background = '#00ff00';
+                 progress.style.boxShadow = '0 0 20px #00ff00';
+                 progress.style.width = '100%';
+            }, 5500);
+
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+                content.style.opacity = '1';
+                checkScroll(); 
+            }, 6800);
+        });
+
+        const iconsList = ['fa-wifi', 'fa-server', 'fa-shield-alt', 'fa-link', 'fa-lock', 'fa-network-wired', 'fa-satellite-dish', 'fa-globe', 'fa-database'];
+        const particlesContainer = document.getElementById('particles');
+        
+        function createParticles() {
+            const count = window.innerWidth < 768 ? 20 : 40;
+            for(let i = 0; i < count; i++) {
+                const icon = document.createElement('i');
+                const randomIcon = iconsList[Math.floor(Math.random()*iconsList.length)];
+                icon.className = `fas ${randomIcon} tech-icon`;
+                
+                icon.style.left = Math.random() * 100 + 'vw';
+                icon.style.animationDelay = Math.random() * -30 + 's';
+                icon.style.animationDuration = (Math.random() * 15 + 20) + 's';
+                const size = Math.random() * 1.5 + 0.8;
+                icon.style.fontSize = size + 'rem';
+                
+                if(size < 1.0) {
+                    icon.style.filter = 'blur(1px)';
+                }
+                
+                particlesContainer.appendChild(icon);
+            }
+        }
+        createParticles();
+
+        const reveals = document.querySelectorAll('.reveal');
+        function checkScroll() {
+            const triggerBottom = window.innerHeight / 5 * 4;
+            reveals.forEach(box => {
+                const boxTop = box.getBoundingClientRect().top;
+                if(boxTop < triggerBottom) {
+                    box.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', checkScroll);
+    </script>
+</body>
+</html>
