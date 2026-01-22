@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AirLink VPN | Свобода интернета</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -14,6 +14,8 @@
             --card-bg: rgba(15, 15, 20, 0.85);
             --text: #ffffff;
             --text-dim: #b0b0ff;
+            --terminal-green: #00ff41;
+            --terminal-red: #ff3d00;
         }
 
         * {
@@ -47,53 +49,170 @@
             transition: opacity 0.8s ease, visibility 0.8s;
         }
 
-        .loader-main-text {
-            font-family: 'Syncopate', sans-serif;
-            color: var(--text);
-            margin-bottom: 40px;
-            letter-spacing: 2px;
-            font-size: 1.2rem;
-            opacity: 0.7;
-            animation: blink 2s infinite;
+        .loader-brand {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px;
         }
 
         .loader-logo {
             width: 100px;
-            margin-bottom: 30px;
-            animation: pulse-logo 2s infinite ease-in-out;
-            border-radius: 15px;
+            height: 100px;
+            border-radius: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            border: 3px solid transparent;
+            background: linear-gradient(45deg, var(--accent), #9d4eff);
+            padding: 8px;
+            box-shadow: 
+                0 0 50px var(--accent-glow),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            animation: logo-glow 3s infinite alternate;
+        }
+
+        @keyframes logo-glow {
+            0% { box-shadow: 0 0 30px var(--accent-glow), inset 0 0 20px rgba(255, 255, 255, 0.1); }
+            100% { box-shadow: 0 0 70px var(--accent-glow), inset 0 0 30px rgba(255, 255, 255, 0.15); }
+        }
+
+        .logo-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 4s linear infinite;
+        }
+
+        .logo-ring-2 {
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-top-color: #00ff41;
+            animation: spin-reverse 3s linear infinite;
+        }
+
+        .logo-ring-3 {
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border-top-color: #7c4dff;
+            border-right-color: #7c4dff;
+            animation: spin 5s linear infinite;
+            opacity: 0.7;
+        }
+
+        .ring-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .ring-dot-2 {
+            background: #00ff41;
+            top: 50%;
+            left: -4px;
+            transform: translateY(-50%);
+            box-shadow: 0 0 10px #00ff41;
+        }
+
+        .ring-dot-3 {
+            background: #ff3d00;
+            top: auto;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #ff3d00;
+        }
+
+        .logo-connection {
+            position: absolute;
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: connection-pulse 2s infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spin-reverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        @keyframes connection-pulse {
+            0%, 100% { height: 40px; opacity: 0.5; }
+            50% { height: 60px; opacity: 1; }
+        }
+
+        .loader-brand-name {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            letter-spacing: 5px;
+            font-size: 1.2rem;
+            color: var(--text);
+            text-shadow: 0 0 10px var(--accent-glow);
+            margin-top: 20px;
         }
 
         .scene {
             position: relative;
             width: 300px;
-            height: 120px;
+            height: 100px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .node {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: var(--text);
             z-index: 2;
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+            position: relative;
         }
 
         .connection-line {
             position: absolute;
             left: 50px;
             right: 50px;
-            height: 3px;
-            background: #222;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #222, transparent);
             overflow: hidden;
-            border-radius: 3px;
         }
 
         .line-progress {
             width: 0%;
             height: 100%;
-            background: var(--accent);
+            background: linear-gradient(90deg, var(--accent), #00ff41);
             box-shadow: 0 0 15px var(--accent);
             transition: width 0.5s linear;
         }
@@ -103,20 +222,24 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            color: #ff3d00;
-            font-size: 3rem;
+            color: var(--terminal-red);
+            font-size: 2.2rem;
             opacity: 0;
-            text-shadow: 0 0 20px #ff3d00;
+            background: transparent !important;
+            border: none !important;
+            text-shadow: 0 0 15px var(--terminal-red);
+            z-index: 3;
+            pointer-events: none;
         }
 
         .bypass-path {
             position: absolute;
-            top: -20px;
+            top: -30px;
             width: 100%;
             height: 140px;
             fill: none;
             stroke: var(--accent);
-            stroke-width: 4;
+            stroke-width: 3;
             stroke-linecap: round;
             stroke-dasharray: 600;
             stroke-dashoffset: 600;
@@ -124,12 +247,72 @@
         }
 
         #statusText {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 3px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
             color: #777;
-            height: 30px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            text-align: center;
+            min-height: 20px;
         }
+
+        .cmd-window {
+            width: 90%;
+            max-width: 500px;
+            background: #0c0c0c;
+            border: 1px solid #333;
+            border-radius: 6px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            min-height: 150px;
+            max-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cmd-header {
+            background: #222;
+            padding: 5px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+        }
+
+        .cmd-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot-1 { background: #ff5f56; }
+        .dot-2 { background: #ffbd2e; }
+        .dot-3 { background: #27c93f; }
+        .cmd-title { font-size: 10px; color: #888; font-family: 'Fira Code', monospace; margin-left: 5px; }
+
+        .cmd-body {
+            flex: 1;
+            padding: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: #ccc;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-height: 0;
+        }
+
+        .cmd-line {
+            opacity: 0;
+            animation: fadeInLine 0.2s forwards;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        .cmd-line.err { color: var(--terminal-red); }
+        .cmd-line.ok { color: var(--terminal-green); }
+        .cmd-line::before { content: "> "; color: #555; font-weight: bold; }
+
+        @keyframes fadeInLine { to { opacity: 1; } }
 
         .particles {
             position: fixed;
@@ -146,11 +329,41 @@
             animation: float-bg 25s infinite linear;
         }
 
+        .network-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.3), transparent);
+            opacity: 0.1;
+        }
+
+        .network-node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(124, 77, 255, 0.5);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(124, 77, 255, 0.3);
+        }
+
+        .server-icon {
+            position: absolute;
+            color: rgba(0, 255, 65, 0.1);
+            font-size: 1.5rem;
+            animation: float-servers 30s infinite linear;
+        }
+
         @keyframes float-bg {
             from { transform: translateY(110vh) rotate(0deg) scale(0.8); opacity: 0; }
             20% { opacity: 0.4; }
             80% { opacity: 0.4; }
             to { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        @keyframes float-servers {
+            from { transform: translateY(110vh) translateX(-100px); opacity: 0; }
+            20% { opacity: 0.2; }
+            80% { opacity: 0.2; }
+            to { transform: translateY(-10vh) translateX(100px); opacity: 0; }
         }
 
         .main-content {
@@ -173,13 +386,134 @@
             padding: 50px 20px;
         }
 
+        .main-logo-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 40px;
+        }
+
         .main-logo {
             width: 160px;
+            height: 160px;
             border-radius: 25px;
-            margin-bottom: 40px;
-            border: 3px solid var(--accent);
-            box-shadow: 0 0 60px var(--accent-glow);
-            animation: pulse-logo 3s infinite ease-in-out;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            border: 4px solid transparent;
+            background: linear-gradient(45deg, var(--accent), #9d4eff, #00ff41);
+            padding: 10px;
+            box-shadow: 
+                0 0 80px var(--accent-glow),
+                inset 0 0 30px rgba(255, 255, 255, 0.1);
+            animation: main-logo-glow 4s infinite alternate;
+        }
+
+        @keyframes main-logo-glow {
+            0% { 
+                box-shadow: 0 0 50px var(--accent-glow), inset 0 0 20px rgba(255, 255, 255, 0.1);
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% { 
+                box-shadow: 0 0 100px var(--accent-glow), inset 0 0 40px rgba(255, 255, 255, 0.15);
+                transform: translate(-50%, -50%) scale(1.03);
+            }
+        }
+
+        .main-logo-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: main-glow-pulse 3s infinite alternate;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        @keyframes main-glow-pulse {
+            0% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .main-logo-wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            border: 2px solid var(--accent);
+            border-radius: 30px;
+            opacity: 0;
+            animation: wave-expand 3s infinite;
+        }
+
+        .main-logo-wave:nth-child(2) {
+            animation-delay: 1s;
+            width: 200px;
+            height: 200px;
+            border-color: #00ff41;
+        }
+
+        .main-logo-wave:nth-child(3) {
+            animation-delay: 2s;
+            width: 220px;
+            height: 220px;
+            border-color: #7c4dff;
+        }
+
+        @keyframes wave-expand {
+            0% { 
+                opacity: 0.7;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            100% { 
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1.3);
+            }
+        }
+
+        .main-logo-connections {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            z-index: 2;
+        }
+
+        .connection-ray {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+            top: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            opacity: 0.5;
+            animation: ray-rotate 20s linear infinite;
+        }
+
+        .connection-ray:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateY(-110px); }
+        .connection-ray:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg) translateY(-110px); }
+        .connection-ray:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg) translateY(-110px); }
+        .connection-ray:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg) translateY(-110px); }
+        .connection-ray:nth-child(5) { transform: translate(-50%, -50%) rotate(180deg) translateY(-110px); }
+        .connection-ray:nth-child(6) { transform: translate(-50%, -50%) rotate(225deg) translateY(-110px); }
+        .connection-ray:nth-child(7) { transform: translate(-50%, -50%) rotate(270deg) translateY(-110px); }
+        .connection-ray:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg) translateY(-110px); }
+
+        @keyframes ray-rotate {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0.3; }
         }
 
         h1 {
@@ -192,6 +526,8 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: -2px;
+            position: relative;
+            z-index: 4;
         }
 
         .tagline {
@@ -204,6 +540,8 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: shimmer 4s ease-in-out infinite;
+            position: relative;
+            z-index: 4;
         }
 
         @keyframes shimmer {
@@ -218,6 +556,8 @@
             flex-wrap: wrap;
             justify-content: center;
             width: 100%;
+            position: relative;
+            z-index: 4;
         }
 
         .btn {
@@ -271,6 +611,51 @@
             box-shadow: 0 10px 30px -10px var(--accent-glow);
         }
 
+        @keyframes call-to-action {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px -10px var(--accent-glow);
+            }
+            15% {
+                transform: scale(1.15);
+                box-shadow: 0 0 50px 15px var(--accent-glow);
+                background: #8a61ff;
+            }
+            30% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px -10px var(--accent-glow);
+                background: var(--accent);
+            }
+            45% {
+                transform: scale(1.15);
+                box-shadow: 0 0 50px 15px var(--accent-glow);
+                background: #8a61ff;
+            }
+            60% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px -10px var(--accent-glow);
+                background: var(--accent);
+            }
+            75% {
+                transform: scale(1.08);
+                box-shadow: 0 0 40px 10px var(--accent-glow);
+                background: #8a61ff;
+            }
+            90% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px -10px var(--accent-glow);
+                background: var(--accent);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px -10px var(--accent-glow);
+            }
+        }
+
+        .btn.call-to-action {
+            animation: call-to-action 4s ease-in-out 1;
+        }
+
         section { padding: 100px 0; }
 
         .reveal {
@@ -284,32 +669,17 @@
             transform: translateY(0);
         }
 
-        /* Стили для карусели на мобильных */
-        .cards-container {
-            position: relative;
-            overflow: hidden;
-        }
-
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 40px;
         }
 
-        .mobile-slider {
-            display: none;
-        }
+        .mobile-slider { display: none; }
 
-        .slider-wrapper {
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-        }
+        .slider-wrapper { position: relative; overflow: hidden; border-radius: 12px; }
 
-        .slider-track {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
+        .slider-track { display: flex; transition: transform 0.5s ease-in-out; }
 
         .slider-slide {
             flex: 0 0 100%;
@@ -461,60 +831,39 @@
             letter-spacing: 1px;
         }
 
-        /* Мобильная адаптация */
         @media (max-width: 768px) {
             .btn { width: 100%; padding: 18px; }
             header { padding: 100px 20px 50px; min-height: auto; }
             .scene { width: 240px; }
-            .loader-main-text { font-size: 1rem; }
             h1 { line-height: 1.2; }
-            
-            .cards-grid {
-                display: none;
-            }
-            
-            .mobile-slider {
-                display: block;
-            }
-            
-            .card:hover {
-                transform: none;
-            }
-            
-            .slider-slide {
-                padding: 30px 25px;
-            }
-            
-            .slider-slide h2 {
-                font-size: 1.2rem;
-            }
-            
-            .slider-slide p {
-                font-size: 1rem;
-            }
-            
-            .slider-slide .main-icon {
-                font-size: 2.5rem;
-            }
-        }
-
-        @keyframes pulse-logo {
-            0%, 100% { transform: scale(1);box-shadow: 0 0 60px var(--accent-glow); }
-            50% { transform: scale(1.03); box-shadow: 0 0 80px var(--accent-glow), 0 0 30px var(--accent); }
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 0.3; }
+            .cards-grid { display: none; }
+            .mobile-slider { display: block; }
+            .slider-slide { padding: 30px 25px; }
+            .cmd-window { max-height: 180px; }
+            .cmd-body { font-size: 11px; }
+            .main-logo-container { width: 180px; height: 180px; }
+            .main-logo { width: 130px; height: 130px; }
+            .main-logo-connections { display: none; }
         }
     </style>
 </head>
 <body>
 
     <div id="loader">
-        <div class="loader-main-text">ИДЕТ ЗАГРУЗКА САЙТА...</div>
-        
-        <img src="https://i.postimg.cc/K80C2vV1/image-b7725c.jpg" class="loader-logo" alt="Logo">
+        <div class="loader-brand">
+            <div class="logo-container">
+                <div class="logo-ring">
+                    <div class="ring-dot"></div>
+                    <div class="ring-dot-2"></div>
+                    <div class="ring-dot-3"></div>
+                </div>
+                <div class="logo-ring logo-ring-2"></div>
+                <div class="logo-ring logo-ring-3"></div>
+                <img src="https://i.postimg.cc/K80C2vV1/image-b7725c.jpg" class="loader-logo" alt="Logo">
+                <div class="logo-connection"></div>
+            </div>
+            <div class="loader-brand-name">AirLinkVPN</div>
+        </div>
         
         <div class="scene">
             <i class="fas fa-server node"></i>
@@ -528,18 +877,48 @@
                 <path d="M 50 70 Q 150 -30 250 70" id="bypassLine" />
             </svg>
         </div>
-        <p id="statusText">УСТАНОВКА СОЕДИНЕНИЯ...</p>
+        
+        <p id="statusText">Инициализация...</p>
+
+        <div class="cmd-window">
+            <div class="cmd-header">
+                <div class="cmd-dot dot-1"></div>
+                <div class="cmd-dot dot-2"></div>
+                <div class="cmd-dot dot-3"></div>
+                <span class="cmd-title">AirLink System Console</span>
+            </div>
+            <div class="cmd-body" id="cmdBody"></div>
+        </div>
     </div>
 
     <div class="particles" id="particles"></div>
 
     <div class="main-content" id="content">
         <header>
-            <img src="https://i.postimg.cc/K80C2vV1/image-b7725c.jpg" class="main-logo" alt="AirLink Logo">
+            <div class="main-logo-container">
+                <div class="main-logo-glow"></div>
+                <div class="main-logo-wave"></div>
+                <div class="main-logo-wave"></div>
+                <div class="main-logo-wave"></div>
+                
+                <div class="main-logo-connections">
+                    <div class="connection-ray"></div>
+                    <div class="connection-ray"></div>
+                    <div class="connection-ray"></div>
+                    <div class="connection-ray"></div>
+                    <div class="connection-ray"></div>
+                    <div class="connection-ray"></div>
+                    <div class="connection-ray"></div>
+                    <div class="connection-ray"></div>
+                </div>
+                
+                <img src="https://i.postimg.cc/K80C2vV1/image-b7725c.jpg" class="main-logo" alt="AirLink Logo">
+            </div>
+            
             <h1>AIRLINK VPN</h1>
             <p class="tagline">Получи доступ к обычному интернету, без белых списков, с нормальным доступом к YouTube и другим сервисам уже сейчас!</p>
             <div class="btn-container">
-                <a href="https://t.me/AirLinkVPNBot" target="_blank" class="btn">
+                <a href="https://t.me/AirLinkVPNBot" target="_blank" class="btn" id="connectBtn">
                     <i class="fas fa-rocket"></i> Подключить
                 </a>
                 <a href="#features" class="btn btn-outline">
@@ -549,7 +928,6 @@
         </header>
 
         <section id="features">
-            <!-- Десктопная версия (3 карточки в ряд) -->
             <div class="cards-grid">
                 <div class="card reveal">
                     <i class="fas fa-shield-halved main-icon"></i>
@@ -564,7 +942,6 @@
                     <i class="fas fa-sync-alt main-icon"></i>
                     <h2>АВТООБНОВЛЕНИЕ И ЗЕРКАЛА</h2>
                     <p>Списки серверов обновляются автоматически каждый час. В приложении (Happ VPN, v2rayTun) достаточно нажать кнопку обновления.</p>
-                    
                     <div class="mirror-note">
                         <i class="fas fa-triangle-exclamation"></i>
                         <div>
@@ -581,7 +958,6 @@
                 </div>
             </div>
             
-            <!-- Мобильная версия (карусель) -->
             <div class="mobile-slider">
                 <div class="slider-wrapper">
                     <div class="slider-track" id="sliderTrack">
@@ -593,12 +969,10 @@
                                 <span class="tag">МТС</span><span class="tag">МегаФон</span><span class="tag">Билайн</span><span class="tag">Tele2</span><span class="tag">Yota</span><span class="tag">Ростелеком</span>
                             </div>
                         </div>
-                        
                         <div class="slider-slide">
                             <i class="fas fa-sync-alt main-icon"></i>
                             <h2>АВТООБНОВЛЕНИЕ И ЗЕРКАЛА</h2>
                             <p>Списки серверов обновляются автоматически каждый час. В приложении (Happ VPN, v2rayTun) достаточно нажать кнопку обновления.</p>
-                            
                             <div class="mirror-note">
                                 <i class="fas fa-triangle-exclamation"></i>
                                 <div>
@@ -606,7 +980,6 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="slider-slide">
                             <i class="fas fa-code-branch main-icon"></i>
                             <h2>БЕСПЛАТНЫЙ И ОТКРЫТЫЙ</h2>
@@ -615,7 +988,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="slider-indicators" id="sliderIndicators">
                     <div class="slider-indicator active" data-index="0"></div>
                     <div class="slider-indicator" data-index="1"></div>
@@ -648,6 +1020,26 @@
     </div>
 
     <script>
+        const cmdBody = document.getElementById('cmdBody');
+        let cmdLines = [];
+        
+        function addLog(text, type = '') {
+            const line = document.createElement('div');
+            line.className = `cmd-line ${type}`;
+            line.innerText = text;
+            
+            cmdLines.push(line);
+            
+            while (cmdLines.length > 7) {
+                cmdLines.shift();
+            }
+            
+            cmdBody.innerHTML = '';
+            cmdLines.forEach(l => cmdBody.appendChild(l));
+            
+            cmdBody.scrollTop = cmdBody.scrollHeight;
+        }
+
         window.addEventListener('load', () => {
             const progress = document.getElementById('progress');
             const breakIcon = document.getElementById('breakIcon');
@@ -655,68 +1047,106 @@
             const statusText = document.getElementById('statusText');
             const loader = document.getElementById('loader');
             const content = document.getElementById('content');
+            const connectBtn = document.getElementById('connectBtn');
             
             setTimeout(() => {
                 progress.style.width = '60%';
+                addLog('Подключение к узлу AirLink...');
+                addLog('Получение манифеста серверов...');
             }, 500);
 
             setTimeout(() => {
-                progress.style.transition = 'width 0.2s ease-out, background 0.2s';
-                progress.style.width = '50%';
+                progress.style.transition = 'width 0.2s, background 0.2s';
+                progress.style.width = '45%';
                 progress.style.background = '#ff3d00';
-                progress.style.boxShadow = '0 0 20px #ff3d00';
                 breakIcon.style.opacity = '1';
-                breakIcon.style.animation = 'pulse-logo 1s infinite';
-                statusText.innerText = 'ОБНАРУЖЕНА БЛОКИРОВКА...';
+                statusText.innerText = 'Доступ ограничен провайдером';
                 statusText.style.color = '#ff3d00';
+                addLog('ОШИБКА: Соединение сброшено узлом DPI', 'err');
+                addLog('Обнаружена блокировка трафика...', 'err');
             }, 2000);
 
             setTimeout(() => {
                 bypassLine.style.transition = 'stroke-dashoffset 2s ease-in-out';
                 bypassLine.style.strokeDashoffset = '0';
-                statusText.innerText = 'ЗАПУСК ПРОТОКОЛА ОБХОДА...';
+                statusText.innerText = 'Запуск протоколов обхода...';
                 statusText.style.color = 'var(--accent)';
-            }, 3500);
+                addLog('Инициализация туннеля XRAY/VLESS...');
+                addLog('Применение обфускации трафика...');
+            }, 3800);
 
             setTimeout(() => {
-                 statusText.innerText = 'СОЕДИНЕНИЕ УСТАНОВЛЕНО!';
+                 statusText.innerText = 'Защищенное соединение установлено';
                  statusText.style.color = '#00ff00';
                  breakIcon.style.opacity = '0';
                  progress.style.transition = 'width 0.8s ease-in-out, background 0.8s';
                  progress.style.background = '#00ff00';
-                 progress.style.boxShadow = '0 0 20px #00ff00';
                  progress.style.width = '100%';
-            }, 5500);
+                 addLog('Рукопожатие выполнено успешно', 'ok');
+                 addLog('Шифрование: AES-256-GCM активно', 'ok');
+            }, 6000);
 
             setTimeout(() => {
                 loader.style.opacity = '0';
                 loader.style.visibility = 'hidden';
                 content.style.opacity = '1';
-                checkScroll(); 
-            }, 6800);
+                checkScroll();
+                
+                setTimeout(() => {
+                    connectBtn.classList.add('call-to-action');
+                    
+                    setTimeout(() => {
+                        connectBtn.classList.remove('call-to-action');
+                    }, 4000);
+                }, 500);
+                
+            }, 7500);
         });
 
         const iconsList = ['fa-wifi', 'fa-server', 'fa-shield-alt', 'fa-link', 'fa-lock', 'fa-network-wired', 'fa-satellite-dish', 'fa-globe', 'fa-database'];
         const particlesContainer = document.getElementById('particles');
         
         function createParticles() {
-            const count = window.innerWidth < 768 ? 20 : 40;
+            const count = window.innerWidth < 768 ? 25 : 50;
+            
             for(let i = 0; i < count; i++) {
                 const icon = document.createElement('i');
                 const randomIcon = iconsList[Math.floor(Math.random()*iconsList.length)];
                 icon.className = `fas ${randomIcon} tech-icon`;
-                
                 icon.style.left = Math.random() * 100 + 'vw';
                 icon.style.animationDelay = Math.random() * -30 + 's';
                 icon.style.animationDuration = (Math.random() * 15 + 20) + 's';
                 const size = Math.random() * 1.5 + 0.8;
                 icon.style.fontSize = size + 'rem';
-                
-                if(size < 1.0) {
-                    icon.style.filter = 'blur(1px)';
-                }
-                
+                icon.style.opacity = Math.random() * 0.2 + 0.05;
                 particlesContainer.appendChild(icon);
+            }
+            
+            for(let i = 0; i < 8; i++) {
+                const server = document.createElement('i');
+                server.className = `fas fa-server server-icon`;
+                server.style.left = Math.random() * 100 + 'vw';
+                server.style.animationDelay = Math.random() * -20 + 's';
+                server.style.animationDuration = (Math.random() * 10 + 25) + 's';
+                particlesContainer.appendChild(server);
+            }
+            
+            for(let i = 0; i < 15; i++) {
+                const line = document.createElement('div');
+                line.className = 'network-line';
+                line.style.left = Math.random() * 100 + 'vw';
+                line.style.top = Math.random() * 100 + 'vh';
+                line.style.width = Math.random() * 200 + 100 + 'px';
+                line.style.transform = `rotate(${Math.random() * 360}deg)`;
+                particlesContainer.appendChild(line);
+            }
+            
+            for(let i = 0; i < 20; i++) {
+                const node = document.createElement('div');
+                node.className = 'network-node';
+                node.style.left = Math.random() * 100 + 'vw';
+                node.style.top = Math.random() * 100 + 'vh';
+                particlesContainer.appendChild(node);
             }
         }
         createParticles();
@@ -726,140 +1156,43 @@
             const triggerBottom = window.innerHeight / 5 * 4;
             reveals.forEach(box => {
                 const boxTop = box.getBoundingClientRect().top;
-                if(boxTop < triggerBottom) {
-                    box.classList.add('active');
-                }
+                if(boxTop < triggerBottom) { box.classList.add('active'); }
             });
         }
         window.addEventListener('scroll', checkScroll);
 
-        // Карусель для мобильных
         const sliderTrack = document.getElementById('sliderTrack');
-        const sliderIndicators = document.getElementById('sliderIndicators');
-        const indicators = sliderIndicators.querySelectorAll('.slider-indicator');
-        
+        const indicators = document.querySelectorAll('.slider-indicator');
         let currentSlide = 0;
         const totalSlides = 3;
         let autoSlideInterval;
         
-        // Функция для переключения слайда
         function goToSlide(index) {
             if (index < 0) index = totalSlides - 1;
             if (index >= totalSlides) index = 0;
-            
             currentSlide = index;
             sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            // Обновляем индикаторы
             indicators.forEach((indicator, i) => {
-                if (i === currentSlide) {
-                    indicator.classList.add('active');
-                } else {
-                    indicator.classList.remove('active');
-                }
+                indicator.classList.toggle('active', i === currentSlide);
             });
         }
         
-        // Автоматическое перелистывание каждые 2 секунды
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(() => {
-                goToSlide(currentSlide + 1);
-            }, 2000);
-        }
+        function startAutoSlide() { autoSlideInterval = setInterval(() => { goToSlide(currentSlide + 1); }, 2500); }
+        function stopAutoSlide() { clearInterval(autoSlideInterval); }
         
-        // Останавливаем авто-перелистывание при взаимодействии
-        function stopAutoSlide() {
-            clearInterval(autoSlideInterval);
-        }
-        
-        // Инициализация карусели
         function initCarousel() {
             if (window.innerWidth <= 768) {
-                // Добавляем обработчики для индикаторов
                 indicators.forEach(indicator => {
                     indicator.addEventListener('click', function() {
-                        const index = parseInt(this.getAttribute('data-index'));
                         stopAutoSlide();
-                        goToSlide(index);
+                        goToSlide(parseInt(this.getAttribute('data-index')));
                         startAutoSlide();
                     });
-                    
-                    // Добавляем поддержку свайпа на мобильных
-                    let touchStartX = 0;
-                    let touchEndX = 0;
-                    
-                    indicator.addEventListener('touchstart', function(e) {
-                        touchStartX = e.changedTouches[0].screenX;
-                    });
-                    
-                    indicator.addEventListener('touchend', function(e) {
-                        touchEndX = e.changedTouches[0].screenX;
-                        handleSwipe();
-                    });
                 });
-                
-                // Добавляем обработчики свайпа для всего трека
-                let trackTouchStartX = 0;
-                let trackTouchEndX = 0;
-                
-                sliderTrack.addEventListener('touchstart', function(e) {
-                    trackTouchStartX = e.changedTouches[0].screenX;
-                    stopAutoSlide();
-                });
-                
-                sliderTrack.addEventListener('touchend', function(e) {
-                    trackTouchEndX = e.changedTouches[0].screenX;
-                    handleTrackSwipe();
-                    startAutoSlide();
-                });
-                
-                function handleSwipe() {
-                    const swipeThreshold = 50;
-                    const diff = touchStartX - touchEndX;
-                    
-                    if (Math.abs(diff) > swipeThreshold) {
-                        if (diff > 0) {
-                            // Свайп влево
-                            goToSlide(currentSlide + 1);
-                        } else {
-                            // Свайп вправо
-                            goToSlide(currentSlide - 1);
-                        }
-                    }
-                }
-                
-                function handleTrackSwipe() {
-                    const swipeThreshold = 50;
-                    const diff = trackTouchStartX - trackTouchEndX;
-                    
-                    if (Math.abs(diff) > swipeThreshold) {
-                        if (diff > 0) {
-                            // Свайп влево
-                            goToSlide(currentSlide + 1);
-                        } else {
-                            // Свайп вправо
-                            goToSlide(currentSlide - 1);
-                        }
-                    }
-                }
-                
-                // Запускаем авто-перелистывание
                 startAutoSlide();
             }
         }
-        
-        // Инициализируем карусель при загрузке
         initCarousel();
-        
-        // Переинициализируем при изменении размера окна
-        window.addEventListener('resize', function() {
-            if (window.innerWidth <= 768) {
-                clearInterval(autoSlideInterval);
-                initCarousel();
-            } else {
-                clearInterval(autoSlideInterval);
-            }
-        });
     </script>
 </body>
 </html>
