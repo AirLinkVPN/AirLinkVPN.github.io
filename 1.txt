@@ -1,3 +1,5 @@
+# profile-update-interval: 1
+# subscription-userinfo: upload=0; download=0; total=107374182400; expire=0
 vless://c3ef0f28-7123-4dd5-aa69-6a99b13fa65f@111.111.111.111:111?security=reality&encryption=none&pbk=xCkhIFxIBMXZg9ntzegRA5P9XkOdy3znkJELXcsmsVg&headerType=none&fp=qq&allowinsecure=0&type=tcp&flow=xtls-rprx-vision&sni=google.com&sid=e9772810b66e5b51#%F0%9F%87%A6%F0%9F%87%B1+Telegram Bot: @AirLinkVPNBot
 vless://c3ef0f28-7123-4dd5-aa69-6a99b13fa65f@111.111.111.111:111?security=reality&encryption=none&pbk=xCkhIFxIBMXZg9ntzegRA5P9XkOdy3znkJELXcsmsVg&headerType=none&fp=qq&allowinsecure=0&type=tcp&flow=xtls-rprx-vision&sni=google.com&sid=e9772810b66e5b51#%F0%9F%87%A6%F0%9F%87%B1+Нажми 🔄, а потом 🕓 если не рабоатет
 vless://21160a7a-1b22-4071-bacf-46bb07e3c8c9@111.111.111.111:111?security=reality&encryption=none&pbk=SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc&headerType=none&allowinsecure=0&type=tcp&flow=xtls-rprx-vision&sni=max.ru#%F0%9F%87%AA%F0%9F%87%BA+⬇️СЕРВАКИ С ОБХОДОМ ГЛУШИЛОК⬇️
