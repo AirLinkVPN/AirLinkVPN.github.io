@@ -14,8 +14,9 @@
       gtag('js', new Date());
       gtag('config', 'G-LF94DVRLKL');
     </script>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Все стили без изменений */
         :root {
             --accent: #7c4dff;
             --accent-glow: rgba(124, 77, 255, 0.6);
@@ -561,9 +562,10 @@
                 <i class="fas fa-copy"></i> Скопировать VPN подписку
             </button>
 
-            <a href="tg://proxy?server=proxytg1.whitelistbot.online&port=443&secret=40e4940ba5b1b2f7b54fdbd4c1af0ce3" class="btn btn-proxy" id="proxyBtn">
+            <!-- Кнопка прокси (исправлена) -->
+            <button class="btn btn-proxy" id="proxyBtn">
                 <i class="fab fa-telegram"></i> Прокси Telegram
-            </a>
+            </button>
 
             <button class="btn btn-outline" id="instructionBtn">
                 <i class="fas fa-question-circle"></i> Инструкция
@@ -673,7 +675,7 @@
         }
         createParticles();
 
-        // Копирование подписки в буфер обмена
+        // Копирование подписки
         const subscriptionUrl = "https://airlinkvpn.github.io/1.txt";
         const copyBtn = document.getElementById('copyVpnBtn');
         const toast = document.getElementById('toast');
@@ -696,7 +698,19 @@
             }, 2500);
         }
 
-        // Управление блоком инструкции
+        // Кнопка прокси — исправленная версия
+        const proxyBtn = document.getElementById('proxyBtn');
+        proxyBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const proxyUrl = 'tg://proxy?server=proxytg1.whitelistbot.online&port=443&secret=40e4940ba5b1b2f7b54fdbd4c1af0ce3';
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.openTelegramLink(proxyUrl);
+            } else {
+                window.open(proxyUrl, '_blank');
+            }
+        });
+
+        // Управление инструкцией
         const instructionBlock = document.getElementById('instructionBlock');
         const instructionDetail = document.getElementById('instructionDetail');
         const instructionBtn = document.getElementById('instructionBtn');
@@ -706,7 +720,6 @@
         const deviceOptions = document.querySelectorAll('.device-option');
 
         function showInstruction() {
-            // Очищаем содержимое инструкции, чтобы при открытии всегда было пустое меню
             instructionDetail.innerHTML = '';
             instructionBlock.classList.remove('hidden');
             instructionBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -724,7 +737,7 @@
         closeInstructionBtn.addEventListener('click', hideInstruction);
         closeInstructionIcon.addEventListener('click', hideInstruction);
 
-        // Обработка выбора устройства
+        // Выбор устройства
         deviceOptions.forEach(opt => {
             opt.addEventListener('click', () => {
                 const device = opt.dataset.device;
@@ -732,7 +745,6 @@
 
                 if (device === 'android' || device === 'ios' || device === 'macos') {
                     const deviceName = device === 'android' ? 'Android' : (device === 'ios' ? 'iOS' : 'macOS');
-                    // Для iOS и macOS используем одну ссылку App Store
                     const appStoreLink = 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973';
                     html = `
                         <p>🚀 <strong>Инструкция по настройке VPN (VLESS) на ${deviceName}.</strong><br>
@@ -785,7 +797,7 @@
             });
         });
 
-        // Установка сегодняшней даты
+        // Дата последнего обновления
         const today = new Date();
         const day = String(today.getDate()).padStart(2, '0');
         const month = String(today.getMonth() + 1).padStart(2, '0');
