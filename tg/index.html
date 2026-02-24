@@ -562,7 +562,7 @@
                 <i class="fas fa-copy"></i> Скопировать VPN подписку
             </button>
 
-            <!-- Кнопка прокси (исправлена) -->
+            <!-- Кнопка прокси (исправлена с улучшенным обработчиком) -->
             <button class="btn btn-proxy" id="proxyBtn">
                 <i class="fab fa-telegram"></i> Прокси Telegram
             </button>
@@ -698,16 +698,31 @@
             }, 2500);
         }
 
-        // Кнопка прокси — исправленная версия
+        // Кнопка прокси — улучшенная версия с диагностикой
         const proxyBtn = document.getElementById('proxyBtn');
         proxyBtn.addEventListener('click', function(e) {
             e.preventDefault();
             const proxyUrl = 'tg://proxy?server=proxytg1.whitelistbot.online&port=443&secret=40e4940ba5b1b2f7b54fdbd4c1af0ce3';
+            
+            // Проверяем, доступен ли Telegram WebApp
+            console.log('Telegram WebApp available:', !!window.Telegram?.WebApp);
+            
             if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.openTelegramLink(proxyUrl);
+                try {
+                    // Пытаемся открыть ссылку через официальный метод
+                    window.Telegram.WebApp.openTelegramLink(proxyUrl);
+                } catch (error) {
+                    console.error('openTelegramLink error:', error);
+                    // Fallback: пытаемся открыть через window.location
+                    window.location.href = proxyUrl;
+                }
             } else {
+                // Если не в Telegram, пробуем открыть в новой вкладке
                 window.open(proxyUrl, '_blank');
             }
+            
+            // Дополнительно показываем тост, если ничего не сработало (для диагностики)
+            showToast('⏳ Попытка открыть прокси...', false);
         });
 
         // Управление инструкцией
