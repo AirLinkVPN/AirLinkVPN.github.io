@@ -17,15 +17,12 @@
             --terminal-green: #00ff41;
             --terminal-red: #ff3d00;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         html { scroll-behavior: smooth; }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
@@ -33,7 +30,6 @@
             overflow-x: hidden;
             line-height: 1.6;
         }
-
         #loader {
             position: fixed;
             top: 0;
@@ -47,21 +43,31 @@
             align-items: center;
             justify-content: center;
             transition: opacity 0.8s ease, visibility 0.8s;
+            padding: 20px;
         }
-
-        .loader-brand {
+        .loader-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .loader-content {
+            max-width: 900px;
+            width: 100%;
             text-align: center;
-            margin-bottom: 30px;
             position: relative;
+            z-index: 2;
         }
-
-        .logo-container {
+        .loader-logo-container {
             position: relative;
             width: 140px;
             height: 140px;
             margin: 0 auto 20px;
         }
-
         .loader-logo {
             width: 100px;
             height: 100px;
@@ -74,17 +80,13 @@
             border: 3px solid transparent;
             background: linear-gradient(45deg, var(--accent), #9d4eff);
             padding: 8px;
-            box-shadow: 
-                0 0 50px var(--accent-glow),
-                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 50px var(--accent-glow), inset 0 0 20px rgba(255, 255, 255, 0.1);
             animation: logo-glow 3s infinite alternate;
         }
-
         @keyframes logo-glow {
             0% { box-shadow: 0 0 30px var(--accent-glow), inset 0 0 20px rgba(255, 255, 255, 0.1); }
             100% { box-shadow: 0 0 70px var(--accent-glow), inset 0 0 30px rgba(255, 255, 255, 0.15); }
         }
-
         .logo-ring {
             position: absolute;
             top: 0;
@@ -94,18 +96,16 @@
             border: 2px solid transparent;
             border-radius: 50%;
             border-top-color: var(--accent);
-            animation: spin 4s linear infinite;
+            animation: spin 3s linear infinite;
         }
-
         .logo-ring-2 {
             top: -10px;
             left: -10px;
             right: -10px;
             bottom: -10px;
             border-top-color: #00ff41;
-            animation: spin-reverse 3s linear infinite;
+            animation: spin-reverse 2.5s linear infinite;
         }
-
         .logo-ring-3 {
             top: -20px;
             left: -20px;
@@ -113,10 +113,9 @@
             bottom: -20px;
             border-top-color: #7c4dff;
             border-right-color: #7c4dff;
-            animation: spin 5s linear infinite;
+            animation: spin 4s linear infinite;
             opacity: 0.7;
         }
-
         .ring-dot {
             position: absolute;
             width: 8px;
@@ -128,7 +127,6 @@
             transform: translateX(-50%);
             box-shadow: 0 0 10px var(--accent);
         }
-
         .ring-dot-2 {
             background: #00ff41;
             top: 50%;
@@ -136,7 +134,6 @@
             transform: translateY(-50%);
             box-shadow: 0 0 10px #00ff41;
         }
-
         .ring-dot-3 {
             background: #ff3d00;
             top: auto;
@@ -145,175 +142,140 @@
             transform: translateX(-50%);
             box-shadow: 0 0 10px #ff3d00;
         }
-
-        .logo-connection {
-            position: absolute;
-            width: 2px;
-            height: 40px;
-            background: linear-gradient(to bottom, var(--accent), transparent);
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: connection-pulse 2s infinite;
-        }
-
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-
         @keyframes spin-reverse {
             from { transform: rotate(360deg); }
             to { transform: rotate(0deg); }
         }
-
-        @keyframes connection-pulse {
-            0%, 100% { height: 40px; opacity: 0.5; }
-            50% { height: 60px; opacity: 1; }
-        }
-
-        .loader-brand-name {
+        .shimmer-text {
             font-family: 'Syncopate', sans-serif;
             font-weight: 700;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
             letter-spacing: 5px;
-            font-size: 1.2rem;
-            color: var(--text);
-            text-shadow: 0 0 10px var(--accent-glow);
-            margin-top: 20px;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #ffffff, #b0b0ff, #7c4dff, #b0b0ff, #ffffff);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
         }
-
-        .scene {
-            position: relative;
-            width: 300px;
-            height: 100px;
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .devices {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            justify-content: space-around;
+            align-items: flex-end;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
         }
-
-        .node {
-            font-size: 2.2rem;
-            color: var(--text);
-            z-index: 2;
+        .device {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .device-icon {
+            font-size: 4rem;
+            color: var(--text-dim);
             filter: drop-shadow(0 0 10px var(--accent-glow));
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        .device.connected .device-icon {
+            color: var(--accent);
+            filter: drop-shadow(0 0 20px var(--accent));
+        }
+        .device-label {
+            margin-top: 15px;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+        .vpn-badge {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            color: var(--accent);
+            text-shadow: 0 0 8px var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 3;
+            white-space: nowrap;
+            letter-spacing: 1px;
+        }
+        .device.connected .vpn-badge {
+            opacity: 1;
+            transform: scale(1);
+            animation: badge-pulse 1.5s infinite;
+        }
+        @keyframes badge-pulse {
+            0% { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+            50% { border-color: #00ff41; color: #00ff41; box-shadow: 0 0 20px #00ff41; }
+            100% { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        }
+        .connection-lines {
+            position: relative;
+            width: 100%;
+            height: 120px;
+            margin: 20px 0;
+        }
+        .line-group {
+            position: absolute;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15%;
+        }
+        .line {
+            width: 2px;
+            height: 0;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            transition: height 0.5s ease;
             position: relative;
         }
-
-        .connection-line {
-            position: absolute;
-            left: 50px;
-            right: 50px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #222, transparent);
-            overflow: hidden;
+        .line.active {
+            height: 80px;
+            animation: line-pulse 1s infinite alternate;
         }
-
-        .line-progress {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), #00ff41);
-            box-shadow: 0 0 15px var(--accent);
-            transition: width 0.5s linear;
+        @keyframes line-pulse {
+            0% { opacity: 0.5; height: 70px; }
+            100% { opacity: 1; height: 90px; }
         }
-
-        .break-flash {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--terminal-red);
-            font-size: 2.2rem;
-            opacity: 0;
-            background: transparent !important;
-            border: none !important;
-            text-shadow: 0 0 15px var(--terminal-red);
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        .bypass-path {
-            position: absolute;
-            top: -30px;
-            width: 100%;
-            height: 140px;
-            fill: none;
-            stroke: var(--accent);
-            stroke-width: 3;
-            stroke-linecap: round;
-            stroke-dasharray: 600;
-            stroke-dashoffset: 600;
-            filter: drop-shadow(0 0 10px var(--accent));
-        }
-
-        #statusText {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            color: #777;
-            margin-bottom: 25px;
+        .loader-status {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            text-align: center;
-            min-height: 20px;
+            margin-top: 30px;
+            min-height: 30px;
+            background: linear-gradient(90deg, #ffffff, #b0b0ff, #7c4dff, #b0b0ff, #ffffff);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
         }
-
-        .cmd-window {
-            width: 90%;
-            max-width: 500px;
-            background: #0c0c0c;
-            border: 1px solid #333;
-            border-radius: 6px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            overflow: hidden;
-            min-height: 150px;
-            max-height: 200px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cmd-header {
-            background: #222;
-            padding: 5px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid #333;
-            flex-shrink: 0;
-        }
-
-        .cmd-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .dot-1 { background: #ff5f56; }
-        .dot-2 { background: #ffbd2e; }
-        .dot-3 { background: #27c93f; }
-        .cmd-title { font-size: 10px; color: #888; font-family: 'Fira Code', monospace; margin-left: 5px; }
-
-        .cmd-body {
-            flex: 1;
-            padding: 12px;
-            font-family: 'Fira Code', monospace;
-            font-size: 12px;
-            color: #ccc;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-height: 0;
-        }
-
-        .cmd-line {
-            opacity: 0;
-            animation: fadeInLine 0.2s forwards;
-            white-space: pre-wrap;
-            word-break: break-word;
-            line-height: 1.4;
-        }
-
-        .cmd-line.err { color: var(--terminal-red); }
-        .cmd-line.ok { color: var(--terminal-green); }
-        .cmd-line::before { content: "> "; color: #555; font-weight: bold; }
-
-        @keyframes fadeInLine { to { opacity: 1; } }
-
         .particles {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -321,51 +283,43 @@
             pointer-events: none;
             overflow: hidden;
         }
-
-        .tech-icon {
+        .tech-icon, .server-icon, .network-line, .network-node {
             position: absolute;
+        }
+        .tech-icon {
             color: rgba(124, 77, 255, 0.25);
             font-size: 1.2rem;
             animation: float-bg 25s infinite linear;
         }
-
         .network-line {
-            position: absolute;
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(124, 77, 255, 0.3), transparent);
             opacity: 0.1;
         }
-
         .network-node {
-            position: absolute;
             width: 6px;
             height: 6px;
             background: rgba(124, 77, 255, 0.5);
             border-radius: 50%;
             box-shadow: 0 0 10px rgba(124, 77, 255, 0.3);
         }
-
         .server-icon {
-            position: absolute;
             color: rgba(0, 255, 65, 0.1);
             font-size: 1.5rem;
             animation: float-servers 30s infinite linear;
         }
-
         @keyframes float-bg {
             from { transform: translateY(110vh) rotate(0deg) scale(0.8); opacity: 0; }
             20% { opacity: 0.4; }
             80% { opacity: 0.4; }
             to { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
-
         @keyframes float-servers {
             from { transform: translateY(110vh) translateX(-100px); opacity: 0; }
             20% { opacity: 0.2; }
             80% { opacity: 0.2; }
             to { transform: translateY(-10vh) translateX(100px); opacity: 0; }
         }
-
         .main-content {
             opacity: 0;
             transition: opacity 1.5s ease;
@@ -375,7 +329,6 @@
             position: relative;
             z-index: 2;
         }
-
         header {
             min-height: 90vh;
             display: flex;
@@ -385,14 +338,12 @@
             text-align: center;
             padding: 50px 20px;
         }
-
         .main-logo-container {
             position: relative;
             width: 220px;
             height: 220px;
             margin: 0 auto 40px;
         }
-
         .main-logo {
             width: 160px;
             height: 160px;
@@ -405,23 +356,13 @@
             border: 4px solid transparent;
             background: linear-gradient(45deg, var(--accent), #9d4eff, #00ff41);
             padding: 10px;
-            box-shadow: 
-                0 0 80px var(--accent-glow),
-                inset 0 0 30px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 80px var(--accent-glow), inset 0 0 30px rgba(255, 255, 255, 0.1);
             animation: main-logo-glow 4s infinite alternate;
         }
-
         @keyframes main-logo-glow {
-            0% { 
-                box-shadow: 0 0 50px var(--accent-glow), inset 0 0 20px rgba(255, 255, 255, 0.1);
-                transform: translate(-50%, -50%) scale(1);
-            }
-            100% { 
-                box-shadow: 0 0 100px var(--accent-glow), inset 0 0 40px rgba(255, 255, 255, 0.15);
-                transform: translate(-50%, -50%) scale(1.03);
-            }
+            0% { box-shadow: 0 0 50px var(--accent-glow), inset 0 0 20px rgba(255, 255, 255, 0.1); transform: translate(-50%, -50%) scale(1); }
+            100% { box-shadow: 0 0 100px var(--accent-glow), inset 0 0 40px rgba(255, 255, 255, 0.15); transform: translate(-50%, -50%) scale(1.03); }
         }
-
         .main-logo-glow {
             position: absolute;
             top: 50%;
@@ -435,12 +376,10 @@
             z-index: 1;
             opacity: 0.5;
         }
-
         @keyframes main-glow-pulse {
             0% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
             100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
         }
-
         .main-logo-wave {
             position: absolute;
             top: 50%;
@@ -453,32 +392,22 @@
             opacity: 0;
             animation: wave-expand 3s infinite;
         }
-
         .main-logo-wave:nth-child(2) {
             animation-delay: 1s;
             width: 200px;
             height: 200px;
             border-color: #00ff41;
         }
-
         .main-logo-wave:nth-child(3) {
             animation-delay: 2s;
             width: 220px;
             height: 220px;
             border-color: #7c4dff;
         }
-
         @keyframes wave-expand {
-            0% { 
-                opacity: 0.7;
-                transform: translate(-50%, -50%) scale(0.8);
-            }
-            100% { 
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(1.3);
-            }
+            0% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); }
         }
-
         .main-logo-connections {
             position: absolute;
             top: 50%;
@@ -488,7 +417,6 @@
             height: 300px;
             z-index: 2;
         }
-
         .connection-ray {
             position: absolute;
             width: 2px;
@@ -500,7 +428,6 @@
             opacity: 0.5;
             animation: ray-rotate 20s linear infinite;
         }
-
         .connection-ray:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateY(-110px); }
         .connection-ray:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg) translateY(-110px); }
         .connection-ray:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg) translateY(-110px); }
@@ -509,13 +436,11 @@
         .connection-ray:nth-child(6) { transform: translate(-50%, -50%) rotate(225deg) translateY(-110px); }
         .connection-ray:nth-child(7) { transform: translate(-50%, -50%) rotate(270deg) translateY(-110px); }
         .connection-ray:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg) translateY(-110px); }
-
         @keyframes ray-rotate {
             0% { opacity: 0.3; }
             50% { opacity: 0.7; }
             100% { opacity: 0.3; }
         }
-
         h1 {
             font-family: 'Syncopate', sans-serif;
             font-size: clamp(2.5rem, 8vw, 5rem);
@@ -529,7 +454,6 @@
             position: relative;
             z-index: 4;
         }
-
         .tagline {
             font-size: clamp(1.1rem, 3vw, 1.5rem);
             max-width: 700px;
@@ -543,13 +467,6 @@
             position: relative;
             z-index: 4;
         }
-
-        @keyframes shimmer {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         .btn-container {
             display: flex;
             gap: 25px;
@@ -559,7 +476,6 @@
             position: relative;
             z-index: 4;
         }
-
         .btn {
             display: flex;
             align-items: center;
@@ -581,7 +497,6 @@
             border-radius: 4px;
             box-shadow: 0 10px 30px -10px var(--accent-glow);
         }
-
         .btn::after {
             content: '';
             position: absolute;
@@ -590,17 +505,13 @@
             transform: skewX(-20deg);
             transition: 0.5s;
         }
-
         .btn:hover::after { left: 100%; }
-
         .btn:hover {
             transform: translateY(-5px) scale(1.02);
             box-shadow: 0 20px 40px -10px var(--accent-glow);
             background: #8a61ff;
         }
-
         .btn:active { transform: translateY(-2px); }
-
         .btn-outline {
             background: transparent;
             border: 2px solid var(--accent);
@@ -610,77 +521,37 @@
             background: rgba(124, 77, 255, 0.1);
             box-shadow: 0 10px 30px -10px var(--accent-glow);
         }
-
         @keyframes call-to-action {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 10px 30px -10px var(--accent-glow);
-            }
-            15% {
-                transform: scale(1.15);
-                box-shadow: 0 0 50px 15px var(--accent-glow);
-                background: #8a61ff;
-            }
-            30% {
-                transform: scale(1);
-                box-shadow: 0 10px 30px -10px var(--accent-glow);
-                background: var(--accent);
-            }
-            45% {
-                transform: scale(1.15);
-                box-shadow: 0 0 50px 15px var(--accent-glow);
-                background: #8a61ff;
-            }
-            60% {
-                transform: scale(1);
-                box-shadow: 0 10px 30px -10px var(--accent-glow);
-                background: var(--accent);
-            }
-            75% {
-                transform: scale(1.08);
-                box-shadow: 0 0 40px 10px var(--accent-glow);
-                background: #8a61ff;
-            }
-            90% {
-                transform: scale(1);
-                box-shadow: 0 10px 30px -10px var(--accent-glow);
-                background: var(--accent);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 10px 30px -10px var(--accent-glow);
-            }
+            0% { transform: scale(1); box-shadow: 0 10px 30px -10px var(--accent-glow); }
+            15% { transform: scale(1.15); box-shadow: 0 0 50px 15px var(--accent-glow); background: #8a61ff; }
+            30% { transform: scale(1); box-shadow: 0 10px 30px -10px var(--accent-glow); background: var(--accent); }
+            45% { transform: scale(1.15); box-shadow: 0 0 50px 15px var(--accent-glow); background: #8a61ff; }
+            60% { transform: scale(1); box-shadow: 0 10px 30px -10px var(--accent-glow); background: var(--accent); }
+            75% { transform: scale(1.08); box-shadow: 0 0 40px 10px var(--accent-glow); background: #8a61ff; }
+            90% { transform: scale(1); box-shadow: 0 10px 30px -10px var(--accent-glow); background: var(--accent); }
+            100% { transform: scale(1); box-shadow: 0 10px 30px -10px var(--accent-glow); }
         }
-
         .btn.call-to-action {
             animation: call-to-action 4s ease-in-out 1;
         }
-
         section { padding: 100px 0; }
-
         .reveal {
             opacity: 0;
             transform: translateY(60px);
             transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
-
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 40px;
         }
-
         .mobile-slider { display: none; }
-
         .slider-wrapper { position: relative; overflow: hidden; border-radius: 12px; }
-
         .slider-track { display: flex; transition: transform 0.5s ease-in-out; }
-
         .slider-slide {
             flex: 0 0 100%;
             width: 100%;
@@ -691,14 +562,12 @@
             backdrop-filter: blur(20px);
             border-radius: 12px;
         }
-
         .slider-indicators {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-top: 30px;
         }
-
         .slider-indicator {
             width: 10px;
             height: 10px;
@@ -707,12 +576,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
         .slider-indicator.active {
             background: var(--accent);
             transform: scale(1.2);
         }
-
         .card {
             background: var(--card-bg);
             padding: 40px;
@@ -722,33 +589,28 @@
             transition: 0.4s ease;
             border-radius: 12px;
         }
-
         .card:hover {
             transform: translateY(-10px);
             border-color: var(--accent);
             box-shadow: 0 20px 50px -20px var(--accent-glow);
         }
-
         .card i.main-icon {
             font-size: 3rem;
             color: var(--accent);
             margin-bottom: 25px;
             display: inline-block;
         }
-
         .card h2 {
             font-family: 'Syncopate', sans-serif;
             font-size: 1.3rem;
             margin-bottom: 20px;
             letter-spacing: 1px;
         }
-
         .card p {
             color: var(--text-dim);
             margin-bottom: 20px;
             font-size: 1.05rem;
         }
-
         .mirror-note {
             margin-top: 25px;
             padding-top: 20px;
@@ -759,20 +621,17 @@
             gap: 15px;
             align-items: flex-start;
         }
-
         .mirror-note i {
             color: #ffcc00;
             font-size: 1.2rem;
             margin-top: 3px;
         }
-
         .operator-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 25px;
         }
-
         .tag {
             padding: 8px 15px;
             background: rgba(124, 77, 255, 0.05);
@@ -783,7 +642,6 @@
             text-transform: uppercase;
             border-radius: 4px;
         }
-
         .how-to-container {
             background: linear-gradient(145deg, rgba(20,20,25,0.9), rgba(10,10,15,0.9));
             padding: 80px 40px;
@@ -793,7 +651,6 @@
             position: relative;
             overflow: hidden;
         }
-        
         .how-to-container::before {
              content: '';
              position: absolute;
@@ -802,25 +659,21 @@
              opacity: 0.1;
              pointer-events: none;
         }
-
         .how-to-container h3 { 
             font-family: 'Syncopate', sans-serif; 
             margin-bottom: 30px;
             font-size: 2rem;
         }
-
         .step-text {
             font-size: 1.2rem;
             color: var(--text-dim);
             max-width: 800px;
             margin: 0 auto 50px;
         }
-        
         .highlight {
             color: var(--accent);
             font-weight: 700;
         }
-
         footer {
             padding: 60px 20px;
             text-align: center;
@@ -830,7 +683,6 @@
             font-family: 'Syncopate', sans-serif;
             letter-spacing: 1px;
         }
-
         @media (max-width: 768px) {
             .btn { width: 100%; padding: 18px; }
             header { padding: 100px 20px 50px; min-height: auto; }
@@ -839,19 +691,21 @@
             .cards-grid { display: none; }
             .mobile-slider { display: block; }
             .slider-slide { padding: 30px 25px; }
-            .cmd-window { max-height: 180px; }
-            .cmd-body { font-size: 11px; }
             .main-logo-container { width: 180px; height: 180px; }
             .main-logo { width: 130px; height: 130px; }
             .main-logo-connections { display: none; }
+            .loader-logo-container { width: 100px; height: 100px; }
+            .loader-logo { width: 70px; height: 70px; }
+            .device-icon { font-size: 2.5rem; }
+            .vpn-badge { font-size: 0.7rem; padding: 4px 8px; top: -10px; right: -10px; }
         }
     </style>
 </head>
 <body>
-
     <div id="loader">
-        <div class="loader-brand">
-            <div class="logo-container">
+        <div class="loader-particles" id="loaderParticles"></div>
+        <div class="loader-content">
+            <div class="loader-logo-container">
                 <div class="logo-ring">
                     <div class="ring-dot"></div>
                     <div class="ring-dot-2"></div>
@@ -860,39 +714,36 @@
                 <div class="logo-ring logo-ring-2"></div>
                 <div class="logo-ring logo-ring-3"></div>
                 <img src="https://i.postimg.cc/K80C2vV1/image-b7725c.jpg" class="loader-logo" alt="Logo">
-                <div class="logo-connection"></div>
             </div>
-            <div class="loader-brand-name">AirLinkVPN</div>
-        </div>
-        
-        <div class="scene">
-            <i class="fas fa-server node"></i>
-            <div class="connection-line">
-                <div class="line-progress" id="progress"></div>
+            <div class="shimmer-text">AIRLINK VPN</div>
+            <div class="devices" id="devices">
+                <div class="device" id="phone">
+                    <i class="fas fa-mobile-alt device-icon"></i>
+                    <span class="vpn-badge">VPN</span>
+                    <span class="device-label">Телефон</span>
+                </div>
+                <div class="device" id="laptop">
+                    <i class="fas fa-laptop device-icon"></i>
+                    <span class="vpn-badge">VPN</span>
+                    <span class="device-label">Ноутбук</span>
+                </div>
+                <div class="device" id="computer">
+                    <i class="fas fa-desktop device-icon"></i>
+                    <span class="vpn-badge">VPN</span>
+                    <span class="device-label">Компьютер</span>
+                </div>
             </div>
-            <i class="fas fa-user node"></i>
-            <i class="fas fa-triangle-exclamation break-flash" id="breakIcon"></i>
-            
-            <svg class="bypass-path" viewBox="0 0 300 140">
-                <path d="M 50 70 Q 150 -30 250 70" id="bypassLine" />
-            </svg>
-        </div>
-        
-        <p id="statusText">Инициализация...</p>
-
-        <div class="cmd-window">
-            <div class="cmd-header">
-                <div class="cmd-dot dot-1"></div>
-                <div class="cmd-dot dot-2"></div>
-                <div class="cmd-dot dot-3"></div>
-                <span class="cmd-title">AirLink System Console</span>
+            <div class="connection-lines">
+                <div class="line-group">
+                    <div class="line" id="line1"></div>
+                    <div class="line" id="line2"></div>
+                    <div class="line" id="line3"></div>
+                </div>
             </div>
-            <div class="cmd-body" id="cmdBody"></div>
+            <div class="loader-status" id="loaderStatus">Устанавливаем защищённое соединение...</div>
         </div>
     </div>
-
     <div class="particles" id="particles"></div>
-
     <div class="main-content" id="content">
         <header>
             <div class="main-logo-container">
@@ -900,7 +751,6 @@
                 <div class="main-logo-wave"></div>
                 <div class="main-logo-wave"></div>
                 <div class="main-logo-wave"></div>
-                
                 <div class="main-logo-connections">
                     <div class="connection-ray"></div>
                     <div class="connection-ray"></div>
@@ -911,10 +761,8 @@
                     <div class="connection-ray"></div>
                     <div class="connection-ray"></div>
                 </div>
-                
                 <img src="https://i.postimg.cc/K80C2vV1/image-b7725c.jpg" class="main-logo" alt="AirLink Logo">
             </div>
-            
             <h1>AIRLINK VPN</h1>
             <p class="tagline">Получи доступ к обычному интернету, без белых списков, с нормальным доступом к YouTube и другим сервисам уже сейчас!</p>
             <div class="btn-container">
@@ -926,7 +774,6 @@
                 </a>
             </div>
         </header>
-
         <section id="features">
             <div class="cards-grid">
                 <div class="card reveal">
@@ -937,7 +784,6 @@
                         <span class="tag">МТС</span><span class="tag">МегаФон</span><span class="tag">Билайн</span><span class="tag">Tele2</span><span class="tag">Yota</span><span class="tag">Ростелеком</span>
                     </div>
                 </div>
-
                 <div class="card reveal">
                     <i class="fas fa-sync-alt main-icon"></i>
                     <h2>АВТООБНОВЛЕНИЕ И ЗЕРКАЛА</h2>
@@ -949,7 +795,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card reveal">
                     <i class="fas fa-code-branch main-icon"></i>
                     <h2>БЕСПЛАТНЫЙ И ОТКРЫТЫЙ</h2>
@@ -957,7 +802,6 @@
                     <p style="margin-top: 20px;">Поддержите проект, отправив "звёзды" в нашем Telegram-боте.</p>
                 </div>
             </div>
-            
             <div class="mobile-slider">
                 <div class="slider-wrapper">
                     <div class="slider-track" id="sliderTrack">
@@ -995,7 +839,6 @@
                 </div>
             </div>
         </section>
-
         <section class="reveal">
             <div class="how-to-container">
                 <i class="fab fa-telegram" style="font-size: 4rem; color: #0088cc; margin-bottom: 30px;"></i>
@@ -1013,102 +856,16 @@
                 </div>
             </div>
         </section>
-
         <footer>
             <p>AIRLINK VPN &copy; 2026 | СВОБОДНЫЙ ДОСТУП К ИНФОРМАЦИИ</p>
         </footer>
     </div>
-
     <script>
-        const cmdBody = document.getElementById('cmdBody');
-        let cmdLines = [];
-        
-        function addLog(text, type = '') {
-            const line = document.createElement('div');
-            line.className = `cmd-line ${type}`;
-            line.innerText = text;
-            
-            cmdLines.push(line);
-            
-            while (cmdLines.length > 7) {
-                cmdLines.shift();
-            }
-            
-            cmdBody.innerHTML = '';
-            cmdLines.forEach(l => cmdBody.appendChild(l));
-            
-            cmdBody.scrollTop = cmdBody.scrollHeight;
-        }
-
-        window.addEventListener('load', () => {
-            const progress = document.getElementById('progress');
-            const breakIcon = document.getElementById('breakIcon');
-            const bypassLine = document.getElementById('bypassLine');
-            const statusText = document.getElementById('statusText');
-            const loader = document.getElementById('loader');
-            const content = document.getElementById('content');
-            const connectBtn = document.getElementById('connectBtn');
-            
-            setTimeout(() => {
-                progress.style.width = '60%';
-                addLog('Подключение к узлу AirLink...');
-                addLog('Получение манифеста серверов...');
-            }, 500);
-
-            setTimeout(() => {
-                progress.style.transition = 'width 0.2s, background 0.2s';
-                progress.style.width = '45%';
-                progress.style.background = '#ff3d00';
-                breakIcon.style.opacity = '1';
-                statusText.innerText = 'Доступ ограничен провайдером';
-                statusText.style.color = '#ff3d00';
-                addLog('ОШИБКА: Соединение сброшено узлом DPI', 'err');
-                addLog('Обнаружена блокировка трафика...', 'err');
-            }, 2000);
-
-            setTimeout(() => {
-                bypassLine.style.transition = 'stroke-dashoffset 2s ease-in-out';
-                bypassLine.style.strokeDashoffset = '0';
-                statusText.innerText = 'Запуск протоколов обхода...';
-                statusText.style.color = 'var(--accent)';
-                addLog('Инициализация туннеля XRAY/VLESS...');
-                addLog('Применение обфускации трафика...');
-            }, 3800);
-
-            setTimeout(() => {
-                 statusText.innerText = 'Защищенное соединение установлено';
-                 statusText.style.color = '#00ff00';
-                 breakIcon.style.opacity = '0';
-                 progress.style.transition = 'width 0.8s ease-in-out, background 0.8s';
-                 progress.style.background = '#00ff00';
-                 progress.style.width = '100%';
-                 addLog('Рукопожатие выполнено успешно', 'ok');
-                 addLog('Шифрование: AES-256-GCM активно', 'ok');
-            }, 6000);
-
-            setTimeout(() => {
-                loader.style.opacity = '0';
-                loader.style.visibility = 'hidden';
-                content.style.opacity = '1';
-                checkScroll();
-                
-                setTimeout(() => {
-                    connectBtn.classList.add('call-to-action');
-                    
-                    setTimeout(() => {
-                        connectBtn.classList.remove('call-to-action');
-                    }, 4000);
-                }, 500);
-                
-            }, 7500);
-        });
-
-        const iconsList = ['fa-wifi', 'fa-server', 'fa-shield-alt', 'fa-link', 'fa-lock', 'fa-network-wired', 'fa-satellite-dish', 'fa-globe', 'fa-database'];
-        const particlesContainer = document.getElementById('particles');
-        
-        function createParticles() {
-            const count = window.innerWidth < 768 ? 25 : 50;
-            
+        function createLoaderParticles() {
+            const container = document.getElementById('loaderParticles');
+            if (!container) return;
+            const iconsList = ['fa-wifi', 'fa-server', 'fa-shield-alt', 'fa-link', 'fa-lock', 'fa-network-wired', 'fa-satellite-dish', 'fa-globe', 'fa-database'];
+            const count = window.innerWidth < 768 ? 15 : 30;
             for(let i = 0; i < count; i++) {
                 const icon = document.createElement('i');
                 const randomIcon = iconsList[Math.floor(Math.random()*iconsList.length)];
@@ -1119,18 +876,90 @@
                 const size = Math.random() * 1.5 + 0.8;
                 icon.style.fontSize = size + 'rem';
                 icon.style.opacity = Math.random() * 0.2 + 0.05;
-                particlesContainer.appendChild(icon);
+                container.appendChild(icon);
             }
-            
+            for(let i = 0; i < 5; i++) {
+                const server = document.createElement('i');
+                server.className = `fas fa-server server-icon`;
+                server.style.left = Math.random() * 100 + 'vw';
+                server.style.animationDelay = Math.random() * -20 + 's';
+                server.style.animationDuration = (Math.random() * 10 + 25) + 's';
+                container.appendChild(server);
+            }
+            for(let i = 0; i < 8; i++) {
+                const line = document.createElement('div');
+                line.className = 'network-line';
+                line.style.left = Math.random() * 100 + 'vw';
+                line.style.top = Math.random() * 100 + 'vh';
+                line.style.width = Math.random() * 200 + 100 + 'px';
+                line.style.transform = `rotate(${Math.random() * 360}deg)`;
+                container.appendChild(line);
+            }
+            for(let i = 0; i < 12; i++) {
+                const node = document.createElement('div');
+                node.className = 'network-node';
+                node.style.left = Math.random() * 100 + 'vw';
+                node.style.top = Math.random() * 100 + 'vh';
+                container.appendChild(node);
+            }
+        }
+        window.addEventListener('load', () => {
+            createLoaderParticles();
+            const loader = document.getElementById('loader');
+            const content = document.getElementById('content');
+            const loaderStatus = document.getElementById('loaderStatus');
+            const devices = document.querySelectorAll('.device');
+            const lines = [document.getElementById('line1'), document.getElementById('line2'), document.getElementById('line3')];
+            setTimeout(() => {
+                lines[0].classList.add('active');
+                loaderStatus.innerText = 'Поиск серверов...';
+            }, 200);
+            setTimeout(() => {
+                lines[1].classList.add('active');
+                loaderStatus.innerText = 'Установка туннеля...';
+            }, 500);
+            setTimeout(() => {
+                lines[2].classList.add('active');
+                devices.forEach(device => device.classList.add('connected'));
+                loaderStatus.innerText = 'Подключение установлено! VPN активирован.';
+            }, 1000);
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+                content.style.opacity = '1';
+                const connectBtn = document.getElementById('connectBtn');
+                connectBtn.classList.add('call-to-action');
+                setTimeout(() => {
+                    connectBtn.classList.remove('call-to-action');
+                }, 4000);
+                checkScroll();
+            }, 1900);
+        });
+        function createMainParticles() {
+            const container = document.getElementById('particles');
+            if (!container) return;
+            const iconsList = ['fa-wifi', 'fa-server', 'fa-shield-alt', 'fa-link', 'fa-lock', 'fa-network-wired', 'fa-satellite-dish', 'fa-globe', 'fa-database'];
+            const count = window.innerWidth < 768 ? 25 : 50;
+            for(let i = 0; i < count; i++) {
+                const icon = document.createElement('i');
+                const randomIcon = iconsList[Math.floor(Math.random()*iconsList.length)];
+                icon.className = `fas ${randomIcon} tech-icon`;
+                icon.style.left = Math.random() * 100 + 'vw';
+                icon.style.animationDelay = Math.random() * -30 + 's';
+                icon.style.animationDuration = (Math.random() * 15 + 20) + 's';
+                const size = Math.random() * 1.5 + 0.8;
+                icon.style.fontSize = size + 'rem';
+                icon.style.opacity = Math.random() * 0.2 + 0.05;
+                container.appendChild(icon);
+            }
             for(let i = 0; i < 8; i++) {
                 const server = document.createElement('i');
                 server.className = `fas fa-server server-icon`;
                 server.style.left = Math.random() * 100 + 'vw';
                 server.style.animationDelay = Math.random() * -20 + 's';
                 server.style.animationDuration = (Math.random() * 10 + 25) + 's';
-                particlesContainer.appendChild(server);
+                container.appendChild(server);
             }
-            
             for(let i = 0; i < 15; i++) {
                 const line = document.createElement('div');
                 line.className = 'network-line';
@@ -1138,19 +967,17 @@
                 line.style.top = Math.random() * 100 + 'vh';
                 line.style.width = Math.random() * 200 + 100 + 'px';
                 line.style.transform = `rotate(${Math.random() * 360}deg)`;
-                particlesContainer.appendChild(line);
+                container.appendChild(line);
             }
-            
             for(let i = 0; i < 20; i++) {
                 const node = document.createElement('div');
                 node.className = 'network-node';
                 node.style.left = Math.random() * 100 + 'vw';
                 node.style.top = Math.random() * 100 + 'vh';
-                particlesContainer.appendChild(node);
+                container.appendChild(node);
             }
         }
-        createParticles();
-
+        createMainParticles();
         const reveals = document.querySelectorAll('.reveal');
         function checkScroll() {
             const triggerBottom = window.innerHeight / 5 * 4;
@@ -1160,13 +987,11 @@
             });
         }
         window.addEventListener('scroll', checkScroll);
-
         const sliderTrack = document.getElementById('sliderTrack');
         const indicators = document.querySelectorAll('.slider-indicator');
         let currentSlide = 0;
         const totalSlides = 3;
         let autoSlideInterval;
-        
         function goToSlide(index) {
             if (index < 0) index = totalSlides - 1;
             if (index >= totalSlides) index = 0;
@@ -1176,10 +1001,8 @@
                 indicator.classList.toggle('active', i === currentSlide);
             });
         }
-        
         function startAutoSlide() { autoSlideInterval = setInterval(() => { goToSlide(currentSlide + 1); }, 2500); }
         function stopAutoSlide() { clearInterval(autoSlideInterval); }
-        
         function initCarousel() {
             if (window.innerWidth <= 768) {
                 indicators.forEach(indicator => {
