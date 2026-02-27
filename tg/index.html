@@ -91,13 +91,13 @@
         .content {
             max-width: 600px;
             width: 100%;
-            padding: 100px 24px 30px;
+            padding: 70px 24px 30px;   /* верхний отступ уменьшен */
             position: relative;
             z-index: 2;
         }
         @media (max-width: 768px) {
             .content {
-                padding: 80px 20px 30px;
+                padding: 50px 20px 30px;  /* ещё меньше на мобильных */
             }
         }
         .logo-container {
@@ -285,6 +285,10 @@
             background: #0088cc;
             box-shadow: 0 8px 20px -8px #0088cc80;
         }
+        .btn-add {
+            background: #00b894;
+            box-shadow: 0 8px 20px -8px #00b89480;
+        }
         .btn-outline {
             background: transparent;
             border: 2px solid var(--accent);
@@ -352,7 +356,8 @@
                 display: none;
             }
         }
-        .instruction-block {
+        /* Блоки инструкций и выбора приложений */
+        .instruction-block, .apps-block {
             margin-top: 30px;
             padding: 20px;
             background: rgba(255, 255, 255, 0.02);
@@ -363,7 +368,7 @@
             transition: all 0.3s ease;
             position: relative;
         }
-        .instruction-block.hidden {
+        .instruction-block.hidden, .apps-block.hidden {
             display: none;
         }
         .close-icon {
@@ -379,21 +384,21 @@
         .close-icon:hover {
             color: var(--accent);
         }
-        .instruction-header {
+        .instruction-header, .apps-header {
             font-family: 'Syncopate', sans-serif;
             font-size: 1.2rem;
             margin-bottom: 15px;
             color: var(--accent);
             text-align: center;
         }
-        .device-selector {
+        .device-selector, .app-selector {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 20px;
             justify-content: center;
         }
-        .device-option {
+        .device-option, .app-option {
             background: rgba(124, 77, 255, 0.1);
             border: 1px solid var(--accent);
             border-radius: 30px;
@@ -405,11 +410,11 @@
             align-items: center;
             gap: 8px;
         }
-        .device-option:hover {
+        .device-option:hover, .app-option:hover {
             background: var(--accent);
             color: white;
         }
-        .device-option i {
+        .device-option i, .app-option i {
             font-size: 1rem;
         }
         .instruction-detail {
@@ -438,6 +443,14 @@
             width: auto;
             padding: 10px 20px;
             display: inline-flex;
+        }
+        .app-note {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            text-align: center;
+            color: var(--text-dim);
+            border-top: 1px solid rgba(124,77,255,0.2);
+            padding-top: 15px;
         }
     </style>
 </head>
@@ -468,9 +481,26 @@
         <div class="last-update" id="lastUpdateDate"></div>
         <div class="button-group">
             <button class="btn btn-primary" id="copyVpnBtn"><i class="fas fa-copy"></i> Скопировать VPN подписку</button>
-            <button class="btn btn-proxy" id="proxyBtn"><i class="fab fa-telegram"></i> Прокси Telegram</button>
+            <button class="btn btn-add" id="addToAppBtn"><i class="fas fa-plus-circle"></i> Добавить подписку в приложение</button>
+            <button class="btn btn-proxy" id="proxyBtn"><i class="fab fa-telegram"></i> Прокси для Telegram</button>
             <button class="btn btn-outline" id="instructionBtn"><i class="fas fa-question-circle"></i> Инструкция</button>
         </div>
+
+        <!-- Блок выбора приложения для добавления подписки (изначально скрыт) -->
+        <div id="appsBlock" class="apps-block hidden">
+            <span class="close-icon" id="closeAppsIcon">×</span>
+            <div class="apps-header"><i class="fas fa-rocket"></i> Выберите приложение</div>
+            <div class="app-selector">
+                <div class="app-option" data-app="happ"><i class="fas fa-bolt"></i> Happ</div>
+                <div class="app-option" data-app="v2rayng"><i class="fas fa-shield-alt"></i> v2rayNG</div>
+                <div class="app-option" data-app="v2raytun"><i class="fas fa-network-wired"></i> v2rayTUN</div>
+                <div class="app-option" data-app="copy"><i class="fas fa-copy"></i> Копировать ссылку</div>
+            </div>
+            <div class="app-note">
+                <i class="fas fa-info-circle"></i> Выберите приложение — мы попробуем открыть ссылку подписки в нём. Если приложение не установлено, скопируйте ссылку и добавьте вручную.
+            </div>
+        </div>
+
         <div id="instructionBlock" class="instruction-block hidden">
             <span class="close-icon" id="closeInstructionIcon">×</span>
             <div class="instruction-header"><i class="fas fa-book-open"></i> Выберите устройство</div>
@@ -485,6 +515,7 @@
                 <button class="btn btn-outline" id="closeInstructionBtn">Скрыть инструкцию</button>
             </div>
         </div>
+
         <div class="info-text">
             <p><i class="fas fa-info-circle"></i><span>Для использования подписки используются приложения: <strong>Happ, v2RayTUN</strong> (на Android/iOS), <strong>Happ, v2RayN</strong> (на Windows/MacOS).</span></p>
             <p><i class="fas fa-check-circle"></i><span>VPN позволяет смотреть YouTube в высоком качестве, звонить в Telegram и WhatsApp без задержек, пользоваться любимыми сервисами при отсутствии интернета.</span></p>
@@ -495,6 +526,7 @@
     </div>
     <div class="toast" id="toast">Ссылка скопирована!</div>
     <script>
+        // Фоновая анимация
         const iconsList = ['fa-wifi', 'fa-server', 'fa-shield-alt', 'fa-link', 'fa-lock', 'fa-network-wired', 'fa-satellite-dish', 'fa-globe', 'fa-database'];
         const particlesContainer = document.getElementById('particles');
         function createParticles() {
@@ -537,6 +569,7 @@
             }
         }
         createParticles();
+
         const subscriptionUrl = "https://airlinkvpn.github.io/1.txt";
         const copyBtn = document.getElementById('copyVpnBtn');
         const toast = document.getElementById('toast');
@@ -548,6 +581,7 @@
                 showToast('❌ Не удалось скопировать', true);
             }
         });
+
         function showToast(message, isError = false) {
             toast.textContent = message;
             toast.style.background = isError ? 'rgba(255, 60, 0, 0.9)' : 'rgba(15, 15, 20, 0.95)';
@@ -556,6 +590,8 @@
                 toast.classList.remove('show');
             }, 2500);
         }
+
+        // Прокси кнопка
         const proxyBtn = document.getElementById('proxyBtn');
         const proxyUrl = 'tg://proxy?server=proxytg1.whitelistbot.online&port=443&secret=40e4940ba5b1b2f7b54fdbd4c1af0ce3';
         proxyBtn.addEventListener('click', function(e) {
@@ -563,6 +599,8 @@
             window.open(proxyUrl, '_blank');
             showToast('⏳ Открытие прокси...', false);
         });
+
+        // Логика инструкции
         const instructionBlock = document.getElementById('instructionBlock');
         const instructionDetail = document.getElementById('instructionDetail');
         const instructionBtn = document.getElementById('instructionBtn');
@@ -570,6 +608,7 @@
         const closeInstructionBtn = document.getElementById('closeInstructionBtn');
         const closeInstructionIcon = document.getElementById('closeInstructionIcon');
         const deviceOptions = document.querySelectorAll('.device-option');
+
         function showInstruction() {
             instructionDetail.innerHTML = '';
             instructionBlock.classList.remove('hidden');
@@ -631,6 +670,88 @@
                 instructionDetail.innerHTML = html;
             });
         });
+
+        // Новая функциональность: добавление подписки в приложение
+        const addToAppBtn = document.getElementById('addToAppBtn');
+        const appsBlock = document.getElementById('appsBlock');
+        const closeAppsIcon = document.getElementById('closeAppsIcon');
+        const appOptions = document.querySelectorAll('.app-option');
+
+        function showAppsBlock() {
+            appsBlock.classList.remove('hidden');
+            appsBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        function hideAppsBlock() {
+            appsBlock.classList.add('hidden');
+        }
+        addToAppBtn.addEventListener('click', showAppsBlock);
+        closeAppsIcon.addEventListener('click', hideAppsBlock);
+
+        // Обработчики выбора приложения
+        appOptions.forEach(opt => {
+            opt.addEventListener('click', () => {
+                const app = opt.dataset.app;
+                if (app === 'copy') {
+                    // Копируем ссылку
+                    navigator.clipboard.writeText(subscriptionUrl).then(() => {
+                        showToast('✅ Ссылка скопирована');
+                    }).catch(() => {
+                        showToast('❌ Ошибка копирования', true);
+                    });
+                    hideAppsBlock();
+                    return;
+                }
+
+                // Для приложений пытаемся открыть intent
+                let intentUrl = '';
+                const encodedUrl = encodeURIComponent(subscriptionUrl);
+                switch(app) {
+                    case 'happ':
+                        intentUrl = `happ://install-config?url=${encodedUrl}`;
+                        break;
+                    case 'v2rayng':
+                        intentUrl = `v2rayng://install-config?url=${encodedUrl}`;
+                        break;
+                    case 'v2raytun':
+                        intentUrl = `v2raytun://install-config?url=${encodedUrl}`;
+                        break;
+                    default:
+                        showToast('Неизвестное приложение', true);
+                        return;
+                }
+
+                // Пытаемся открыть
+                try {
+                    // Создаём невидимую ссылку и эмулируем клик
+                    const link = document.createElement('a');
+                    link.href = intentUrl;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    // Немного задержки для срабатывания
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                    }, 100);
+
+                    // Показываем подсказку, что пытаемся открыть
+                    showToast(`🔄 Пытаемся открыть в ${app}...`, false);
+
+                    // Если приложение не установлено, браузер может ничего не сделать.
+                    // Через небольшую задержку предложим скопировать ссылку.
+                    setTimeout(() => {
+                        // Проверить, не свернулось ли окно (эвристика) – сложно.
+                        // Просто покажем дополнительный toast с советом.
+                        showToast('⚠️ Если приложение не открылось, скопируйте ссылку и добавьте вручную', false);
+                    }, 1500);
+                } catch (e) {
+                    showToast('❌ Не удалось открыть приложение', true);
+                }
+
+                hideAppsBlock(); // скрываем блок выбора
+            });
+        });
+
+        // Дата последнего обновления
         const today = new Date();
         const day = String(today.getDate()).padStart(2, '0');
         const month = String(today.getMonth() + 1).padStart(2, '0');
