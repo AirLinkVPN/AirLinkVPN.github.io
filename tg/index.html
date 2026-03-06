@@ -91,13 +91,13 @@
         .content {
             max-width: 600px;
             width: 100%;
-            padding: 70px 24px 30px;   /* уменьшен верхний отступ */
+            padding: 70px 24px 30px;
             position: relative;
             z-index: 2;
         }
         @media (max-width: 768px) {
             .content {
-                padding: 50px 20px 30px;  /* уменьшен верхний отступ для мобильных */
+                padding: 50px 20px 30px;
             }
         }
         .logo-container {
@@ -468,7 +468,7 @@
         <div class="last-update" id="lastUpdateDate"></div>
         <div class="button-group">
             <button class="btn btn-primary" id="copyVpnBtn"><i class="fas fa-copy"></i> Скопировать VPN подписку</button>
-            <button class="btn btn-proxy" id="proxyBtn"><i class="fab fa-telegram"></i> Прокси для Telegram</button>  <!-- изменён текст -->
+            <button class="btn btn-proxy" id="tgChannelBtn"><i class="fab fa-telegram"></i> TG Канал</button>
             <button class="btn btn-outline" id="instructionBtn"><i class="fas fa-question-circle"></i> Инструкция</button>
         </div>
         <div id="instructionBlock" class="instruction-block hidden">
@@ -488,7 +488,6 @@
         <div class="info-text">
             <p><i class="fas fa-info-circle"></i><span>Для использования подписки используются приложения: <strong>Happ, v2RayTUN</strong> (на Android/iOS), <strong>Happ, v2RayN</strong> (на Windows/MacOS).</span></p>
             <p><i class="fas fa-check-circle"></i><span>VPN позволяет смотреть YouTube в высоком качестве, звонить в Telegram и WhatsApp без задержек, пользоваться любимыми сервисами при отсутствии интернета.</span></p>
-            <p><i class="fas fa-bolt"></i><span>Прокси ускоряет Telegram, если он замедлился.</span></p>
             <p><i class="fas fa-lightbulb"></i><span>Не знаете как подключить VPN? <a href="#" id="instructionLink">Смотри инструкцию</a>.</span></p>
         </div>
         <footer>AirLink VPN © 2026 | Свобода интернета</footer>
@@ -556,12 +555,12 @@
                 toast.classList.remove('show');
             }, 2500);
         }
-        const proxyBtn = document.getElementById('proxyBtn');
-        const proxyUrl = 'tg://proxy?server=proxytg1.whitelistbot.online&port=443&secret=40e4940ba5b1b2f7b54fdbd4c1af0ce3';
-        proxyBtn.addEventListener('click', function(e) {
+        // Новая кнопка для Telegram-канала
+        const tgChannelBtn = document.getElementById('tgChannelBtn');
+        tgChannelBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            window.open(proxyUrl, '_blank');
-            showToast('⏳ Открытие прокси...', false);
+            window.open('https://t.me/AirLinkVPN', '_blank');
+            // можно добавить короткий тост, но для простоты просто открываем ссылку
         });
         const instructionBlock = document.getElementById('instructionBlock');
         const instructionDetail = document.getElementById('instructionDetail');
